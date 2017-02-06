@@ -1,0 +1,19 @@
+<html>
+	<head>
+		<title>File Upload</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css"></link>
+	</head>
+	</head>
+	<body>
+		<p>Select a file to upload or <a href="/files/" target="_blank">browse</a> currently uploaded files.</p>
+		<form action="FileUpload" method="post" class="box" enctype="multipart/form-data">
+			<label class="label">File</label>
+			<p class="control">
+			    <input type="file" name="file">
+			</p>
+			<p class="control">
+				<input type="submit" class="button is-primary" name="submit" value="Submit">
+			</p>
+		</form>	
+	</body>
+</html>

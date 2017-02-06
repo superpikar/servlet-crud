@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sample Form</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css"></link>
+</head>
+<body>
+	<p>The ShowForm Servlet will display the content posted by an HTML form. Try it out by choosing a file (small size is preferred) to reference the ShowParameters Servlet</p>
+	<form action="ShowForm" method="post" class="box" enctype="multipart/form-data">
+		<label class="label">Name</label>
+		<p class="control">
+			<input class="input" type="text" placeholder="Text input" name="input">
+		</p>
+		<label class="label">File</label>
+		<p class="control">
+		    <input type="file" name="file">
+		</p>
+		<p class="control">
+			<input type="submit" class="button is-primary" value="Submit">
+		</p>
+	</form>
+</body>
+</html>

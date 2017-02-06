@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sample Form</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css"></link>
+</head>
+<body>
+	<p>To debug a HTML form, set its action attribute to reference the ShowParameter servlet</p>
+	<form action="ShowParameters" method="post" class="box">
+		<label class="label">Name</label>
+		<p class="control">
+			<input class="input" type="text" placeholder="Text input" name="input">
+		</p>
+		<label class="label">Subject</label>
+		<p class="control">
+			<span class="select"> 
+				<select name="select">
+					<option>Select dropdown</option>
+					<option>With options</option>
+				</select>
+			</span>
+		</p>
+		<label class="label">Message</label>
+		<p class="control">
+			<textarea class="textarea" placeholder="Textarea" name="textarea"></textarea>
+		</p>
+		<label class="label">File</label>
+		<p class="control">
+		    <input type="file" name="file">
+		</p>
+		<p class="control">
+			<label class="radio"> 
+				<input type="radio" name="radio" value="yes">
+				Yes
+			</label>
+			<label class="radio">
+				<input type="radio" name="radio" value="no">
+				No
+			</label>
+		</p>
+		<div class="control">
+			<p class="control">
+				<input type="submit" class="button is-primary" value="Submit">
+			</p>
+		</div>
+	</form>
+</body>
+</html>
