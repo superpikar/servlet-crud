@@ -1,0 +1,30 @@
+package superpikar.servlet.basic;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class DisplayUsers
+ */
+@WebServlet("/DisplayUsers")
+public class DisplayUsers extends HttpServlet {
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.getSession();
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		out.println("<html>"
+				+ "<head><title>Get Concurrent User</title></head>"
+				+ "<body>"
+				+ "<h1>Get Concurrent User</h1>"
+				+ "Users : " + ConcurrentUserTracker.getConcurrentUsers()
+				+ "</body>"
+				+ "</html");
+	}
+}

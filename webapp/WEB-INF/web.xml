@@ -26,4 +26,7 @@
     <servlet-name>servlet-crud</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
+  <listener>
+    <listener-class>superpikar.servlet.basic.ConcurrentUserTracker</listener-class>
+  </listener>
 </web-app>
