@@ -11,9 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class ShowHeaders
+ * Servlet implementation class ShowHeaders, 
+ * if you want to use annotation rather than web.xml, 
+ * put annotation for routing @WebServlet("/ShowHeaders")
  */
-@WebServlet("/ShowHeaders")
+
 public class ShowHeaders extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

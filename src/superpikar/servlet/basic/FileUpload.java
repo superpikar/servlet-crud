@@ -22,7 +22,6 @@ import com.sun.istack.internal.logging.Logger;
  * Servlet implementation class FileUpload
  * credit : https://docs.oracle.com/javaee/6/tutorial/doc/glraq.html
  */
-@WebServlet("/FileUpload")
 @MultipartConfig
 public class FileUpload extends HttpServlet {
 	private static final long serialVersionUID = 1L;

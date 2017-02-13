@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSessionListener;
 /**
  * Servlet implementation class ConcurrentUser
  */
-@WebServlet("/ConcurrentUser")
 public class ConcurrentUserTracker implements HttpSessionListener {
 	static int users = 0;
        

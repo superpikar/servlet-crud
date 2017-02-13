@@ -14,7 +14,6 @@ import com.sun.xml.internal.ws.api.pipe.NextAction;
 /**
  * Servlet implementation class LinkTracker, from http://java.cnam.fr/iagl/biblio/Serlvets%20&%20JSP%20-%20Falkner%20Jones.pdf page 60
  */
-@WebServlet("/LinkTracker")
 public class LinkTracker extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static Hashtable links = new Hashtable();
