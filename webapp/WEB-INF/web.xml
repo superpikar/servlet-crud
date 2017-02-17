@@ -35,6 +35,10 @@
   	<servlet-class>superpikar.servlet.basic.LinkTracker</servlet-class>
   </servlet>
   <servlet>
+  	<servlet-name>SampleServlet</servlet-name>
+  	<servlet-class>superpikar.servlet.basic.SampleServlet</servlet-class>
+  </servlet>
+  <servlet>
   	<servlet-name>ShowForm</servlet-name>
   	<servlet-class>superpikar.servlet.basic.ShowForm</servlet-class>
   </servlet>
@@ -51,8 +55,16 @@
   	<servlet-class>superpikar.servlet.basic.ShowSource</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>NewsController</servlet-name>
-  	<servlet-class>superpikar.servlet.controller.NewsController</servlet-class>
+  	<servlet-name>HomeController</servlet-name>
+  	<servlet-class>superpikar.servlet.controller.HomeController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>LoginController</servlet-name>
+  	<servlet-class>superpikar.servlet.controller.LoginController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>PostController</servlet-name>
+  	<servlet-class>superpikar.servlet.controller.PostController</servlet-class>
   </servlet>
   
   <servlet-mapping>
@@ -72,6 +84,10 @@
     <url-pattern>/link-tracker</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
+    <servlet-name>SampleServlet</servlet-name>
+    <url-pattern>/sample-servlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
     <servlet-name>ShowForm</servlet-name>
     <url-pattern>/show-form</url-pattern>
   </servlet-mapping>
@@ -87,9 +103,18 @@
     <servlet-name>ShowSource</servlet-name>
     <url-pattern>/show-source</url-pattern>
   </servlet-mapping>
+  
   <servlet-mapping>
-    <servlet-name>NewsController</servlet-name>
-    <url-pattern>/home</url-pattern>
+    <servlet-name>HomeController</servlet-name>
+    <url-pattern>/admin</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LoginController</servlet-name>
+    <url-pattern>/admin/login</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PostController</servlet-name>
+    <url-pattern>/admin/news</url-pattern>
   </servlet-mapping> 
   
   <listener>

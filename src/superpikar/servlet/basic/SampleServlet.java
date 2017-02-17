@@ -1,4 +1,4 @@
-package superpikar.servlet.controller;
+package superpikar.servlet.basic;
 
 import java.io.*;
 import java.util.*;
@@ -11,11 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jtwig.web.servlet.JtwigRenderer;
 
-/**
- * Servlet implementation class ServletCRUD
- */
-
-public class NewsController extends HttpServlet {
+public class SampleServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 //	private final JtwigRenderer renderer = JtwigRenderer.defaultRenderer();
        
@@ -23,7 +19,7 @@ public class NewsController extends HttpServlet {
      * @throws IOException 
      * @see HttpServlet#HttpServlet()
      */
-    public NewsController() throws IOException {
+    public SampleServlet() throws IOException {
         super();
         // TODO Auto-generated constructor stub
         /* Create and adjust the configuration singleton */
@@ -44,10 +40,6 @@ public class NewsController extends HttpServlet {
 							"<h1>Servlet CRUD</h1>"+
 						"</body>"
 				);
-//		request.setAttribute("variable", "Hello");
-//		renderer.dispatcherFor("/WEB-INF/templates/index.twig.html")
-//	        .with("name", "Jtwig")
-//	        .render(request, response);
 	}
 
 	/**
