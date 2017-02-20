@@ -1,11 +1,11 @@
-package superpikar.servlet.dao;
+package superpikar.servlet.admin.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import superpikar.servlet.model.User;
+import superpikar.servlet.admin.model.User;
 import superpikar.servlet.util.DbUtil;
 
 public class UserDao {

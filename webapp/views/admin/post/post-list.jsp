@@ -92,6 +92,7 @@
 					<thead>
 						<tr>
 							<th>Title/Excerpt</th>
+							<th></th>
 							<th>Created</th>
 							<th>Modification</th>
 							<th>Actions</th>
@@ -101,6 +102,18 @@
 						<c:forEach items="${posts}" var="post">
 						<tr>
 							<td><a href="${pageContext.request.contextPath}/admin/news?action=edit&id=${post.id}">${post.title}</a></td>
+							<td>
+								<figure class="image is-64x64">
+									<c:choose>
+										<c:when test="${not empty post.image}">
+											<img src="${pageContext.request.contextPath}/images/${post.image}" alt="" />
+										</c:when>
+										<c:otherwise>
+											<img src="http://placehold.it/64x64" alt="" />
+										</c:otherwise>
+									</c:choose>
+								</figure>
+							</td>
 							<td>
 								${post.registerUserId}<br/>
 								${post.registerDate}

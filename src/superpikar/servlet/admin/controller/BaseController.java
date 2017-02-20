@@ -1,4 +1,4 @@
-package superpikar.servlet.controller;
+package superpikar.servlet.admin.controller;
 
 import java.io.IOException;
 

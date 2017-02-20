@@ -1,4 +1,4 @@
-package superpikar.servlet.controller;
+package superpikar.servlet.admin.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-import superpikar.servlet.dao.PostDao;
-import superpikar.servlet.model.Post;
-import superpikar.servlet.model.User;
+import superpikar.servlet.admin.dao.PostDao;
+import superpikar.servlet.admin.model.Post;
+import superpikar.servlet.admin.model.User;
 import superpikar.servlet.util.ImageUtil;
 
 /**

@@ -1,4 +1,4 @@
-package superpikar.servlet.model;
+package superpikar.servlet.admin.model;
 
 /*
  * class of Post, the attributes/fields inspired by https://docs.bolt.cm/3.3/contenttypes/intro#an-example-news-items

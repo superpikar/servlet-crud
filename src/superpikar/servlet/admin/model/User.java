@@ -1,4 +1,4 @@
-package superpikar.servlet.model;
+package superpikar.servlet.admin.model;
 
 /**
  * Class User, representing user in the system

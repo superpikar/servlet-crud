@@ -1,4 +1,4 @@
-package superpikar.servlet.dao;
+package superpikar.servlet.admin.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import superpikar.servlet.model.Post;
+import superpikar.servlet.admin.model.Post;
 import superpikar.servlet.util.DbUtil;
 
 /*

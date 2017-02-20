@@ -56,15 +56,15 @@
   </servlet>
   <servlet>
     <servlet-name>HomeController</servlet-name>
-    <servlet-class>superpikar.servlet.controller.HomeController</servlet-class>
+    <servlet-class>superpikar.servlet.admin.controller.HomeController</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>LoginController</servlet-name>
-    <servlet-class>superpikar.servlet.controller.LoginController</servlet-class>
+    <servlet-class>superpikar.servlet.admin.controller.LoginController</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>PostController</servlet-name>
-    <servlet-class>superpikar.servlet.controller.PostController</servlet-class>
+    <servlet-class>superpikar.servlet.admin.controller.PostController</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>servlet-crud</servlet-name>

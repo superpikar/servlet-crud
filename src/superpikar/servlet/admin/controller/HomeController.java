@@ -1,4 +1,4 @@
-package superpikar.servlet.controller;
+package superpikar.servlet.admin.controller;
 
 import java.io.*;
 import java.util.*;
@@ -13,9 +13,9 @@ import javax.servlet.http.HttpSession;
 
 import org.jtwig.web.servlet.JtwigRenderer;
 
-import superpikar.servlet.dao.PostDao;
-import superpikar.servlet.dao.UserDao;
-import superpikar.servlet.model.User;
+import superpikar.servlet.admin.dao.PostDao;
+import superpikar.servlet.admin.dao.UserDao;
+import superpikar.servlet.admin.model.User;
 
 /**
  * Servlet implementation class ServletCRUD
