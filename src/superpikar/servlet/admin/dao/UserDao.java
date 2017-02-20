@@ -18,6 +18,7 @@ public class UserDao {
 	}
 	
 	public int addUser(User user) {
+		// not implemented yet
 		return 0;
 	}
 	
