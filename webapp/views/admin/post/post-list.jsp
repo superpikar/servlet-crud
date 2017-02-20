@@ -6,19 +6,67 @@
 	<jsp:attribute name="title">Post List</jsp:attribute>
 	
 	<jsp:attribute name="header">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vex-js/3.0.0/css/vex.min.css" />
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vex-js/3.0.0/css/vex-theme-plain.min.css" />
+		<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vex-js/3.0.0/css/vex.min.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vex-js/3.0.0/css/vex-theme-plain.min.css" /> -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
 	</jsp:attribute>
 	
 	<jsp:attribute name="footer">
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vex-js/3.0.0/js/vex.combined.min.js"></script>
+		<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vex-js/3.0.0/js/vex.combined.min.js"></script> -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
 		<script>
 			var app = new Vue({
 			  	el: '#app',
 			  	methods: {
-				  	confirmDelete: function(ID, title) {
-				  		vex.dialog.confirm({
+			  		confirmRestore: function(id, title) {
+			  			swal({
+				  		  title: 'Are you sure want to restore "'+title+'"',
+				  		  text: "You will not be able to recover the file!",
+				  		  type: "warning",
+				  		  showCancelButton: true,
+				  		  confirmButtonColor: "#DD6B55",
+				  		  confirmButtonText: "Yes, restore it!",
+				  		  cancelButtonText: "No, cancel plx!",
+				  		  closeOnConfirm: false,
+				  		  closeOnCancel: false
+				  		},
+				  		function(isConfirm){
+				  			if (isConfirm) {
+					  		  swal("Restored!", "Your file has been restored.", "success");
+					  		  window.setTimeout(function(){
+					  		  	window.location="${pageContext.request.contextPath}/admin/news?action=restore&id="+id;		  		            
+					  		  }, 1000);
+				  			}
+				  			else{
+				  				swal("Cancelled", "Your file is safe :)", "error");
+				  			}
+				  		});
+			  		},
+				  	confirmDelete: function(id, title) {
+				  		swal({
+				  		  title: 'Are you sure want to delete "'+title+'"',
+				  		  text: "You will not be able to recover the file!",
+				  		  type: "warning",
+				  		  showCancelButton: true,
+				  		  confirmButtonColor: "#DD6B55",
+				  		  confirmButtonText: "Yes, delete it!",
+				  		  cancelButtonText: "No, cancel plx!",
+				  		  closeOnConfirm: false,
+				  		  closeOnCancel: false
+				  		},
+				  		function(isConfirm){
+				  		  if (isConfirm) {
+				  		    swal("Deleted!", "Your file has been deleted.", "success");
+				  		    window.setTimeout(function(){
+				  		  		window.location="${pageContext.request.contextPath}/admin/news?action=delete&id="+id;		  		            
+				  		    }, 1000)
+				  		  } else {
+				  		    swal("Cancelled", "Your file is safe :)", "error");
+				  		  }
+				  		});
+			
+						/* vex.dialog.confirm({
 				  		    message: 'Are you sure want to delete "'+title+'"',
 				  		    className: 'vex-theme-plain', // Overwrites defaultOptions,
 				  		    callback: function(value) {
@@ -29,7 +77,7 @@
 				  		            console.log('Chicken.')
 				  		        }
 				  		    }
-				  		}); 	
+				  		}); */ 	
 				  	}
 			  	}
 			});			
@@ -44,32 +92,49 @@
 					<thead>
 						<tr>
 							<th>Title/Excerpt</th>
-							<th>Author</th>
-							<th>Created at</th>
+							<th>Created</th>
+							<th>Modification</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach items="${posts}" var="post">
 						<tr>
-							<td><a href="${pageContext.request.contextPath}/admin/news?action=edit&id=${post.ID}"><c:out value="${post.title}" /></a></td>
-							<td><c:out value="${post.userID}" /></td>
+							<td><a href="${pageContext.request.contextPath}/admin/news?action=edit&id=${post.id}">${post.title}</a></td>
 							<td>
-								<c:out value="${post.createdDate}" />
+								${post.registerUserId}<br/>
+								${post.registerDate}
 							</td>
 							<td>
+								${post.modificationUserId}<br/>
+								${post.modificationDate}
+							</td>
+							<td>
+							<c:choose>
+								<c:when test="${action == null || action=='delete' }">
 								<p class="control">
-								  	<a class="button" href="${pageContext.request.contextPath}/admin/news?action=edit&id=${post.ID}">
+								  	<a class="button" href="${pageContext.request.contextPath}/admin/news?action=edit&id=${post.id}">
 								    	<span class="icon is-small">
 								      		<i class="fa fa-pencil-square-o"></i>
 								    	</span>
 								  	</a>
-								  	<a class="button" href="#" v-on:click="confirmDelete(${post.ID}, '${post.title}')">
+								  	<a class="button" href="#" v-on:click="confirmDelete(${post.id}, '${post.title}')">
 								    	<span class="icon is-small">
 								      		<i class="fa fa-times"></i>
 								    	</span>
 								  	</a>
 								</p>
+								</c:when>
+								<c:when test="${action == 'trash' || action=='restore' }">
+								<p class="control">
+								  	<a class="button" href="#" v-on:click="confirmRestore(${post.id}, '${post.title}')">
+								    	<span class="icon is-small" alt="restore">
+								      		<i class="fa fa-undo"></i>
+								    	</span>
+								  	</a>
+								</p>
+								</c:when>
+							</c:choose>
 							</td>
 						</tr>
 						</c:forEach>

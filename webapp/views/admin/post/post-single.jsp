@@ -63,7 +63,7 @@
 			</div>
 		</article>
 		</c:if>
-		<form action="${pageContext.request.contextPath}/admin/news" method="post">
+		<form action="${pageContext.request.contextPath}/admin/news" method="post" enctype="multipart/form-data">
 		<div class="columns">
 			<div class="column is-9">
 				<label class="label">Title</label>
@@ -74,15 +74,28 @@
 				<p class="control">
 					<span>{{slug}}</span>
 				</p>
+				<label class="label">Thumbnail</label>
+				<div class="control is-grouped">
+					<div class="control is-expanded">
+						<input type="file" name="thumbnail" value="${post.image}"/>
+					</div>
+					<div class="control">
+						<p>Preview : ${post.image}</p>
+						<figure class="image is-128x128">
+							<img src="${pageContext.request.contextPath}/images/${post.image}" alt="" />
+						</figure>
+					</div>
+				</div>
 				<label class="label">Content</label>
 				<p class="control">
 					<textarea name="content" id="editor">
 						${post.content} 
-					</textarea>
+					</textarea>						
 				</p>
-				<input type="hidden" name="id" value="${post.ID}" />
+				<input type="hidden" name="id" value="${post.id}" />
 				<input type="hidden" name="slug" v-bind:value="slug"/>
 				<input type="hidden" name="action" value="${action}"/>
+				<input type="hidden" name="currentThumbnail" value="${post.image}"/>
 			</div>
 			<div class="column is-3">
 				<div class="card">
@@ -94,8 +107,8 @@
 				    		</button>
 				    		<c:if test="${action == 'edit'}">
 				    		<hr />
-				    		<span class="tag">Created : ${post.createdDate}</span><br/>
-				    		<span class="tag">Updated : ${post.updatedDate}</span>
+				    		<span class="tag">Created : ${post.registerDate}</span><br/>
+				    		<span class="tag">Updated : ${post.modificationDate}</span>
 				    		</c:if>
 				      	</div>
 				    </div>

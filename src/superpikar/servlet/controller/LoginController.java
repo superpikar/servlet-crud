@@ -37,6 +37,7 @@ public class LoginController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/admin");			
 		}
 		else{
+			session.removeAttribute("message");
 			RequestDispatcher view = request.getRequestDispatcher(TEMPLATE_LOGIN);
 			view.forward(request, response);			
 		}
@@ -59,7 +60,8 @@ public class LoginController extends HttpServlet {
 		else {
 			System.out.println("null!");
 			session.setAttribute("message", "Username/password wrong");
-			response.sendRedirect(request.getContextPath()+"/admin/login");
+			RequestDispatcher view = request.getRequestDispatcher(TEMPLATE_LOGIN);
+			view.forward(request, response);
 		}
 	}
 

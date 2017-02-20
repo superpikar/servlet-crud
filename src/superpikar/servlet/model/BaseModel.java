@@ -40,6 +40,7 @@ public class BaseModel {
 		this.modificationDate = modificationDate;
 	}
 	
+	// http://stackoverflow.com/questions/7509697/java-check-to-see-if-a-variable-has-been-initialized
 	public boolean isEmpty(){
 		return getId()==0;
 	}
@@ -50,10 +51,10 @@ public class BaseModel {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getregisterIp() {
+	public String getRegisterIp() {
 		return registerIp;
 	}
-	public void setregisterIp(String registerIp) {
+	public void setRegisterIp(String registerIp) {
 		this.registerIp = registerIp;
 	}
 	public int getRegisterUserId() {

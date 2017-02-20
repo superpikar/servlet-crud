@@ -13,10 +13,37 @@
 	<jsp:invoke fragment="header"/>	
 </head>
 <body>
+	<nav class="nav has-shadow">
+		<div class="container">
+	  	<div class="nav-left">
+	    	<a class="nav-item">
+	    		<h1 class="title">Pikar CMS</h1>
+	      		<!-- <img src="http://bulma.io/images/bulma-logo.png" alt="Bulma logo"> -->
+	    	</a>
+	  	</div>
+  		<!-- This "nav-toggle" hamburger menu is only visible on mobile -->
+  		<!-- You need JavaScript to toggle the "is-active" class on "nav-menu" -->
+	  	<span class="nav-toggle">
+	    	<span></span>
+	    	<span></span>
+	    	<span></span>
+	  	</span>
+
+  		<!-- This "nav-menu" is hidden on mobile -->
+  		<!-- Add the modifier "is-active" to display it on mobile -->
+  		<div class="nav-right nav-menu">
+    		<a class="nav-item" href="#">
+    			Profile
+    		</a>
+    		<a class="nav-item" href="<%=request.getContextPath()%>/admin?action=logout">
+      			Logout
+    		</a>
+  		</div>
+		</div>
+	</nav>
 	<div id="app" class="container">
 		<div class="columns">
 			<div class="column is-2 is-fullheight">
-				<h1 class="title">Pikar CMS</h1>
 				<aside class="menu">
 					<p class="menu-label">General</p>
 					<ul class="menu-list">
@@ -31,6 +58,9 @@
 						</li>
 						<li>
 							<a href="<%=request.getContextPath()%>/admin/news?action=add"><i class="fa fa-pencil-square-o"></i> Add News</a>
+						</li>
+						<li>
+							<a href="<%=request.getContextPath()%>/admin/news?action=trash"><i class="fa fa-trash"></i> Deleted News</a>
 						</li>
 					</ul>
 				</aside>

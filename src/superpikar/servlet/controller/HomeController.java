@@ -26,8 +26,8 @@ public class HomeController extends HttpServlet {
 	private UserDao userDao;
 	private final String TEMPLATE = "/views/admin/home/index.jsp";
 	
-	public HomeController(){
-		 userDao = new UserDao();
+	public HomeController() {
+		userDao = new UserDao();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,6 +47,7 @@ public class HomeController extends HttpServlet {
 				// DELETE THE SESSION HERE
 				// SET MESSAGE LOGOUT SUCCESS
 				// GO TO LOGIN PAGE WITH MESSAGE
+				session.removeAttribute("user");
 				response.sendRedirect(request.getContextPath()+"/admin/login");
 			}
 		}

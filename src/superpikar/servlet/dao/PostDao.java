@@ -29,15 +29,16 @@ public class PostDao {
 	
 	public int addPost(Post post){
 		try{
-			PreparedStatement preparedStatement = connection.prepareStatement("insert into "+tableName+"(title, slug, content, image, user_id, created_date, updated_date) values(?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement preparedStatement = connection.prepareStatement("insert into "+tableName+"(title, slug, content, image, registerIp, registerUserId, registerDate, deleted) values(?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 			preparedStatement.setString(1, post.getTitle());
 			preparedStatement.setString(2, post.getSlug());
 			preparedStatement.setString(3, post.getContent());
 			preparedStatement.setString(4, post.getImage());
-			preparedStatement.setInt(5, post.getModificationUserId());
-			preparedStatement.setDate(6, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
+			preparedStatement.setString(5, post.getRegisterIp());
+			preparedStatement.setInt(6, post.getRegisterUserId());
 			preparedStatement.setDate(7, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
-			System.out.print(preparedStatement.toString());
+			preparedStatement.setBoolean(8, false);
+			System.out.println(preparedStatement.toString());
 			preparedStatement.executeUpdate();
 			
 			// credit http://stackoverflow.com/questions/1376218/is-there-a-way-to-retrieve-the-autoincrement-id-from-a-prepared-statement
@@ -53,16 +54,17 @@ public class PostDao {
 	
 	public int updatePost(Post post){
 		try{
-			PreparedStatement preparedStatement = connection.prepareStatement("update "+tableName+" set title=?, slug=?, content=?, image=?, modificationUserId=?, modificationDate=? where id=?");
+			PreparedStatement preparedStatement = connection.prepareStatement("update "+tableName+" set title=?, slug=?, content=?, image=?, modificationIp=?, modificationUserId=?, modificationDate=? where id=?");
             // Parameters start with 1
 			preparedStatement.setString(1, post.getTitle());
 			preparedStatement.setString(2, post.getSlug());
 			preparedStatement.setString(3, post.getContent());
 			preparedStatement.setString(4, post.getImage());
-			preparedStatement.setInt(5, post.getModificationUserId());
-			preparedStatement.setDate(6, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
-			preparedStatement.setInt(7, post.getId());
-			System.out.print(preparedStatement.toString());
+			preparedStatement.setString(5, post.getModificationIp());
+			preparedStatement.setInt(6, post.getModificationUserId());
+			preparedStatement.setDate(7, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
+			preparedStatement.setInt(8, post.getId());
+			System.out.println(preparedStatement.toString());
 			preparedStatement.executeUpdate();
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -70,23 +72,40 @@ public class PostDao {
 		return post.getId();
 	}
 	
-	public void deletePost(int ID){
+	public int deletePost(int id, boolean isDeleted){
+		try{
+			PreparedStatement preparedStatement = connection.prepareStatement("update "+tableName+" set deleted=? where id=?");
+			preparedStatement.setBoolean(1, isDeleted);
+			preparedStatement.setInt(2, id);
+			System.out.println(preparedStatement.toString());
+			preparedStatement.executeUpdate();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
+	
+	public void forceDeletePost(int id){
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement("delete from "+tableName+" where id=?");
-			preparedStatement.setInt(1, ID);
+			preparedStatement.setInt(1, id);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public List<Post> getAllPosts(){
+	public List<Post> getAllPosts(boolean isDeleted){
 		List<Post> posts = new ArrayList<Post>();
 		try {
-			Statement statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery("select * from "+tableName);
+			PreparedStatement preparedStatement = connection.prepareStatement("select * from "+tableName+" where deleted=?");
+			preparedStatement.setBoolean(1, isDeleted);
+			System.out.println(preparedStatement.toString());
+			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {
 				Post post = new Post(rs.getInt("id"), rs.getString("title"), rs.getString("slug"), rs.getString("content"), rs.getString("image"));
+				post.setRegisterProperties(rs.getString("registerIp"), rs.getInt("registerUserId"), rs.getDate("registerDate"));
+				post.setModificationProperties(rs.getString("modificationIp"), rs.getInt("modificationUserId"), rs.getDate("modificationDate"));
 				posts.add(post);
 			}
 		} catch (SQLException e) {
@@ -108,6 +127,8 @@ public class PostDao {
 			ResultSet rs = preparedStatement.executeQuery();
 			if(rs.next()){
 				post.setProperties(rs.getInt("id"), rs.getString("title"), rs.getString("slug"), rs.getString("content"), rs.getString("image"));
+				post.setRegisterProperties(rs.getString("registerIp"), rs.getInt("registerUserId"), rs.getDate("registerDate"));
+				post.setModificationProperties(rs.getString("modificationIp"), rs.getInt("modificationUserId"), rs.getDate("modificationDate"));
 			}
 		} catch (SQLException e) {
 			

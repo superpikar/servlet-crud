@@ -21,52 +21,51 @@
       <param-value>true</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
-  </servlet>  
-  <servlet>
-  	<servlet-name>DisplayUsers</servlet-name>
-  	<servlet-class>superpikar.servlet.basic.DisplayUsers</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>FileUpload</servlet-name>
-  	<servlet-class>superpikar.servlet.basic.FileUpload</servlet-class>
+    <servlet-name>DisplayUsers</servlet-name>
+    <servlet-class>superpikar.servlet.basic.DisplayUsers</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>LinkTracker</servlet-name>
-  	<servlet-class>superpikar.servlet.basic.LinkTracker</servlet-class>
+    <servlet-name>FileUpload</servlet-name>
+    <servlet-class>superpikar.servlet.basic.FileUpload</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>SampleServlet</servlet-name>
-  	<servlet-class>superpikar.servlet.basic.SampleServlet</servlet-class>
+    <servlet-name>LinkTracker</servlet-name>
+    <servlet-class>superpikar.servlet.basic.LinkTracker</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>ShowForm</servlet-name>
-  	<servlet-class>superpikar.servlet.basic.ShowForm</servlet-class>
+    <servlet-name>SampleServlet</servlet-name>
+    <servlet-class>superpikar.servlet.basic.SampleServlet</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>ShowHeaders</servlet-name>
-  	<servlet-class>superpikar.servlet.basic.ShowHeaders</servlet-class>
+    <servlet-name>ShowForm</servlet-name>
+    <servlet-class>superpikar.servlet.basic.ShowForm</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>ShowParameters</servlet-name>
-  	<servlet-class>superpikar.servlet.basic.ShowParameters</servlet-class>
+    <servlet-name>ShowHeaders</servlet-name>
+    <servlet-class>superpikar.servlet.basic.ShowHeaders</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>ShowSource</servlet-name>
-  	<servlet-class>superpikar.servlet.basic.ShowSource</servlet-class>
+    <servlet-name>ShowParameters</servlet-name>
+    <servlet-class>superpikar.servlet.basic.ShowParameters</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>HomeController</servlet-name>
-  	<servlet-class>superpikar.servlet.controller.HomeController</servlet-class>
+    <servlet-name>ShowSource</servlet-name>
+    <servlet-class>superpikar.servlet.basic.ShowSource</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>LoginController</servlet-name>
-  	<servlet-class>superpikar.servlet.controller.LoginController</servlet-class>
+    <servlet-name>HomeController</servlet-name>
+    <servlet-class>superpikar.servlet.controller.HomeController</servlet-class>
   </servlet>
   <servlet>
-  	<servlet-name>PostController</servlet-name>
-  	<servlet-class>superpikar.servlet.controller.PostController</servlet-class>
+    <servlet-name>LoginController</servlet-name>
+    <servlet-class>superpikar.servlet.controller.LoginController</servlet-class>
   </servlet>
-  
+  <servlet>
+    <servlet-name>PostController</servlet-name>
+    <servlet-class>superpikar.servlet.controller.PostController</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>servlet-crud</servlet-name>
     <url-pattern>/</url-pattern>
@@ -103,7 +102,6 @@
     <servlet-name>ShowSource</servlet-name>
     <url-pattern>/show-source</url-pattern>
   </servlet-mapping>
-  
   <servlet-mapping>
     <servlet-name>HomeController</servlet-name>
     <url-pattern>/admin</url-pattern>
@@ -115,8 +113,7 @@
   <servlet-mapping>
     <servlet-name>PostController</servlet-name>
     <url-pattern>/admin/news</url-pattern>
-  </servlet-mapping> 
-  
+  </servlet-mapping>
   <listener>
     <listener-class>superpikar.servlet.basic.ConcurrentUserTracker</listener-class>
   </listener>

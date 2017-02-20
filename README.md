@@ -1,6 +1,11 @@
 # SERVLET CRUD 
 This source code is for learning purpose. Some of the source code are modified from the references. 
 
+## Installation
+Map directory for uploading static content in "C"\servers\uploads". Put this configuration inside <Host> in eclipse servers
+``<Context docBase="C:\servers\uploads" path="/servlet-crud/images"/>``
+
+
 ### References : 
 - [Servlets & JSP - Falkner Jones](http://java.cnam.fr/iagl/biblio/Serlvets%20&%20JSP%20-%20Falkner%20Jones.pdf)
 - [The fileupload Example Application](https://docs.oracle.com/javaee/6/tutorial/doc/glraq.html)
