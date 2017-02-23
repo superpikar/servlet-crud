@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import superpikar.servlet.admin.dao.PostDao;
+import superpikar.servlet.admin.dao.UserDao;
 import superpikar.servlet.admin.model.Post;
 import superpikar.servlet.admin.model.User;
 import superpikar.servlet.util.ImageUtil;
@@ -25,15 +26,15 @@ import superpikar.servlet.util.PropUtil;
  * Servlet implementation class PostController
  */
 @MultipartConfig
-public class PostController extends HttpServlet {
+public class UserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private PostDao postDao;
+	private UserDao userDao;
 	private PropUtil propUtil;
-	private final String TEMPLATE_LIST = "/views/admin/post/post-list.jsp";
-	private final String TEMPLATE_SINGLE = "/views/admin/post/post-single.jsp";
+	private final String TEMPLATE_LIST = "/views/admin/user/user-list.jsp";
+	private final String TEMPLATE_SINGLE = "/views/admin/user/user-single.jsp";
 	
-	public PostController(){
-		postDao = new PostDao();
+	public UserController(){
+		userDao = new UserDao();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,12 +48,12 @@ public class PostController extends HttpServlet {
 		else {
 			if(action==null){
 				session.removeAttribute("message");	// clear session
-				request.setAttribute("posts", postDao.getAllPosts(false));			
+				request.setAttribute("users", userDao.getAllUsers(false));			
 				page = TEMPLATE_LIST;
 			}
 			else {
 				if(action.equalsIgnoreCase("trash")) {
-					request.setAttribute("posts", postDao.getAllPosts(true));			
+					request.setAttribute("users", userDao.getAllUsers(true));			
 					page = TEMPLATE_LIST;
 				}
 				else if(action.equalsIgnoreCase("add")) {
@@ -60,19 +61,19 @@ public class PostController extends HttpServlet {
 				}
 				else if(action.equalsIgnoreCase("edit")) {
 					int id= Integer.parseInt(request.getParameter("id"));
-					request.setAttribute("post", postDao.getPostById(id));
+					request.setAttribute("post", userDao.getUserById(id));
 					page = TEMPLATE_SINGLE;
 				}
 				else if(action.equalsIgnoreCase("delete")) {
 					int id= Integer.parseInt(request.getParameter("id"));
-					postDao.deletePost(id, true);
-					request.setAttribute("posts", postDao.getAllPosts(false));	
+					userDao.deleteUser(id, true);
+					request.setAttribute("users", userDao.getAllUsers(false));	
 					page = TEMPLATE_LIST;
 				}
 				else if(action.equalsIgnoreCase("restore")) {
 					int id= Integer.parseInt(request.getParameter("id"));
-					postDao.deletePost(id, false);
-					request.setAttribute("posts", postDao.getAllPosts(true));	
+					userDao.deleteUser(id, false);
+					request.setAttribute("users", userDao.getAllUsers(true));	
 					page = TEMPLATE_LIST;
 				}
 			}			
@@ -94,42 +95,43 @@ public class PostController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/admin/login");
 		}
 		else {
-			Post post = new Post();
-			User user = (User)session.getAttribute("user");
-			post.setTitle(request.getParameter("title"));
-			post.setSlug(request.getParameter("slug"));
-			post.setContent(request.getParameter("content"));
+			User user = new User();
+			User adminUser = (User)session.getAttribute("user");
+			user.setUsername(request.getParameter("username"));
+			user.setPassword(request.getParameter("password"));
+			user.setEmail(request.getParameter("email"));
+			user.setWebsite(request.getParameter("website"));
 			
 			Part filePart = request.getPart("thumbnail"); // Retrieves <input type="file" name="thumbnail">
 			
 			fileName = ImageUtil.getFileName(filePart);
 			if(fileName.equals("")){
-				post.setImage(request.getParameter("currentThumbnail"));
+				user.setImage(request.getParameter("currentThumbnail"));
 			}
 			else {
-				post.setImage(fileName);				
+				user.setImage(fileName);				
 			}
 			// IF ID IS NULL THEN CREATE USER, OTHERWISE UPDATE USER
 			if(id == null || id.isEmpty()) {
-				post.setRegisterUserId(user.getId());
-				post.setRegisterIp(request.getRemoteAddr());
-				resultId = postDao.addPost(post);
+				user.setRegisterUserId(adminUser.getId());
+				user.setRegisterIp(request.getRemoteAddr());
+				resultId = userDao.addUser(user);
 				if(!fileName.equals("")){
 					ImageUtil.saveFileToDirectory(filePart, propUtil);
 				}
-				session.setAttribute("message", "Create new post success!");
+				session.setAttribute("message", "Create new user success!");
 			} 
 			else {
-				post.setId(Integer.parseInt(id));
-				post.setModificationUserId(user.getId());
-				post.setModificationIp(request.getRemoteAddr());
-				resultId = postDao.updatePost(post);
+				user.setId(Integer.parseInt(id));
+				user.setModificationUserId(adminUser.getId());
+				user.setModificationIp(request.getRemoteAddr());
+				resultId = userDao.updateUser(user);
 				if(!fileName.equals("")){
 					ImageUtil.saveFileToDirectory(filePart, propUtil);
 				}
-				session.setAttribute("message", "Update '"+post.getTitle()+"' success!");
+				session.setAttribute("message", "Update '"+user.getUsername()+"' success!");
 			}
-			response.sendRedirect(request.getContextPath()+"/admin/news?action=edit&id="+resultId);			
+			response.sendRedirect(request.getContextPath()+"/admin/user?action=edit&id="+resultId);			
 		}	
 	}
 }

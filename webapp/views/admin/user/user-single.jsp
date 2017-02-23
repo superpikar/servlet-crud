@@ -18,7 +18,10 @@
 		</c:choose>
 		<c:out value="${title}" />
 	</jsp:attribute>
-
+	
+	<jsp:attribute name="header">
+	</jsp:attribute>
+	
 	<jsp:attribute name="footer">
 		<script type="text/javascript" src="${pageContext.request.contextPath}/libs/naversmarteditor/js/service/HuskyEZCreator.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/NaverSmartEditor.js"></script>

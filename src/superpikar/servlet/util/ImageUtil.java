@@ -21,16 +21,13 @@ public class ImageUtil {
 		return null;
 	}
 	
-	public static String saveFileToDirectory(Part filePart, ServletContext servletContext) throws IOException{
-		Properties properties = new Properties();
-		properties.load(servletContext.getResourceAsStream("/resources/servlet-crud.properties"));
-		
+	public static String saveFileToDirectory(Part filePart, PropUtil propUtil) throws IOException{
 		// SAVE FILE TO DIRECTORY
 		// credit http://stackoverflow.com/questions/2422468/how-to-upload-files-to-server-using-jsp-servlet
 		String fileName = getFileName(filePart);
-	    File uploads = new File(properties.getProperty("UPLOAD_DIR"));
+	    File uploads = new File(propUtil.getProperty("UPLOAD_DIR"));
 	    File file = new File(uploads, fileName);
-	    System.out.println("filename "+properties.getProperty("UPLOAD_DIR")+"/"+fileName);
+	    System.out.println("filename "+propUtil.getProperty("UPLOAD_DIR")+"/"+fileName);
 	    try (InputStream filecontent = filePart.getInputStream()) {
 	        Files.copy(filecontent, file.toPath());
 	    }

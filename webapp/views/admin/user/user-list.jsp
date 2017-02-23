@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <t:layout-admin>
-	<jsp:attribute name="title">Post List</jsp:attribute>
+	<jsp:attribute name="title">User List</jsp:attribute>
 	
 	<jsp:attribute name="footer">
 		<script>
@@ -56,19 +56,6 @@
 				  		    swal("Cancelled", "Your file is safe :)", "error");
 				  		  }
 				  		});
-			
-						/* vex.dialog.confirm({
-				  		    message: 'Are you sure want to delete "'+title+'"',
-				  		    className: 'vex-theme-plain', // Overwrites defaultOptions,
-				  		    callback: function(value) {
-				  		    	if (value) {
-				  		    		window.location="${pageContext.request.contextPath}/admin/news?action=delete&id="+ID;
-				  		            console.log('Successfully destroyed the planet.', '${pageContext.request.contextPath}/admin/news?action=delete&id='+ID)
-				  		        } else {
-				  		            console.log('Chicken.')
-				  		        }
-				  		    }
-				  		}); */ 	
 				  	}
 			  	}
 			});			
@@ -76,13 +63,13 @@
 	</jsp:attribute>
 	
 	<jsp:body>
-		<h1 class="title">Post List</h1>
+		<h1 class="title">User List</h1>
 		<div class="columns">
 			<div class="column is-9">
 				<table class="table">
 					<thead>
 						<tr>
-							<th>Title/Excerpt</th>
+							<th>Username</th>
 							<th></th>
 							<th>Created</th>
 							<th>Modification</th>
@@ -90,14 +77,14 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${posts}" var="post">
+						<c:forEach items="${users}" var="user">
 						<tr>
-							<td><a href="${pageContext.request.contextPath}/admin/news?action=edit&id=${post.id}">${post.title}</a></td>
+							<td><a href="${pageContext.request.contextPath}/admin/user?action=edit&id=${user.id}">${user.username}</a></td>
 							<td>
 								<figure class="image is-64x64">
 									<c:choose>
-										<c:when test="${not empty post.image}">
-											<img src="${pageContext.request.contextPath}/images/${post.image}" alt="" />
+										<c:when test="${not empty user.image}">
+											<img src="${pageContext.request.contextPath}/images/${user.image}" alt="" />
 										</c:when>
 										<c:otherwise>
 											<img src="http://placehold.it/64x64" alt="" />
@@ -106,23 +93,23 @@
 								</figure>
 							</td>
 							<td>
-								${post.registerUserId}<br/>
-								${post.registerDate}
+								${user.registerUserId}<br/>
+								${user.registerDate}
 							</td>
 							<td>
-								${post.modificationUserId}<br/>
-								${post.modificationDate}
+								${user.modificationUserId}<br/>
+								${user.modificationDate}
 							</td>
 							<td>
 							<c:choose>
 								<c:when test="${action == null || action=='delete' }">
 								<p class="control">
-								  	<a class="button" href="${pageContext.request.contextPath}/admin/news?action=edit&id=${post.id}">
+								  	<a class="button" href="${pageContext.request.contextPath}/admin/user?action=edit&id=${user.id}">
 								    	<span class="icon is-small">
 								      		<i class="fa fa-pencil-square-o"></i>
 								    	</span>
 								  	</a>
-								  	<a class="button" href="#" v-on:click="confirmDelete(${post.id}, '${post.title}')">
+								  	<a class="button" href="#" v-on:click="confirmDelete(${user.id}, '${user.username}')">
 								    	<span class="icon is-small">
 								      		<i class="fa fa-times"></i>
 								    	</span>
@@ -131,7 +118,7 @@
 								</c:when>
 								<c:when test="${action == 'trash' || action=='restore' }">
 								<p class="control">
-								  	<a class="button" href="#" v-on:click="confirmRestore(${post.id}, '${post.title}')">
+								  	<a class="button" href="#" v-on:click="confirmRestore(${user.id}, '${user.username}')">
 								    	<span class="icon is-small" alt="restore">
 								      		<i class="fa fa-undo"></i>
 								    	</span>
@@ -153,12 +140,11 @@
 				  	<div class="card-content">
 				    	<div class="content">
 				    		<!-- get page context http://stackoverflow.com/questions/5850336/what-does-this-expression-language-pagecontext-request-contextpath-exactly-do -->
-				    		<a href="${pageContext.request.contextPath}/admin/news?action=add" class="button is-primary">Add News</a>
+				    		<a href="${pageContext.request.contextPath}/admin/user?action=add" class="button is-primary">Add User</a>
 				      	</div>
 				    </div>
 				</div>
 			</div>
 		</div>	
-	
 	</jsp:body>
 </t:layout-admin>

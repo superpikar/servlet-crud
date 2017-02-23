@@ -54,6 +54,8 @@
     <servlet-name>ShowSource</servlet-name>
     <servlet-class>superpikar.servlet.basic.ShowSource</servlet-class>
   </servlet>
+  
+  <!-- ADMIN CONTROLLER -->
   <servlet>
     <servlet-name>HomeController</servlet-name>
     <servlet-class>superpikar.servlet.admin.controller.HomeController</servlet-class>
@@ -66,6 +68,12 @@
     <servlet-name>PostController</servlet-name>
     <servlet-class>superpikar.servlet.admin.controller.PostController</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>UserController</servlet-name>
+    <servlet-class>superpikar.servlet.admin.controller.UserController</servlet-class>
+  </servlet>
+  <!-- END OF ADMIN CONTROLLER -->
+  
   <servlet-mapping>
     <servlet-name>servlet-crud</servlet-name>
     <url-pattern>/</url-pattern>
@@ -102,6 +110,8 @@
     <servlet-name>ShowSource</servlet-name>
     <url-pattern>/show-source</url-pattern>
   </servlet-mapping>
+  
+  <!-- MAPPING OF ADMIN -->
   <servlet-mapping>
     <servlet-name>HomeController</servlet-name>
     <url-pattern>/admin</url-pattern>
@@ -114,6 +124,11 @@
     <servlet-name>PostController</servlet-name>
     <url-pattern>/admin/news</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UserController</servlet-name>
+    <url-pattern>/admin/user</url-pattern>
+  </servlet-mapping>
+  <!-- END OF ADMIN MAPPING -->
   <listener>
     <listener-class>superpikar.servlet.basic.ConcurrentUserTracker</listener-class>
   </listener>
