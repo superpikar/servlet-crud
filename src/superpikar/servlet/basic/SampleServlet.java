@@ -20,16 +20,13 @@ public class SampleServlet extends HttpServlet {
      * @see HttpServlet#HttpServlet()
      */
     public SampleServlet() throws IOException {
-        super();
-        // TODO Auto-generated constructor stub
-        /* Create and adjust the configuration singleton */
+        
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		out.println("<html>"+
@@ -46,7 +43,6 @@ public class SampleServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 	}
 
 }

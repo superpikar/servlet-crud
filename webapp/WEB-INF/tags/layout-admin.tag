@@ -6,10 +6,12 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title><jsp:invoke fragment="title" /></title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css"></link>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/libs/bulma-enhancement/css/bulma-breadcrumb.css"></link>
 	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/style.css"></link>
 	<jsp:invoke fragment="header"/>	
 </head>
@@ -76,6 +78,12 @@
 							<a href="<%=request.getContextPath()%>/admin/user?action=trash"><i class="fa fa-trash"></i> Deleted User</a>
 						</li>
 					</ul>
+					<p class="menu-label">Files</p>
+					<ul class="menu-list">
+						<li>
+							<a href="<%=request.getContextPath()%>/admin/files"><i class="fa fa-folder"></i> View Files</a>
+						</li>
+					</ul>
 				</aside>
 			</div>
 			<div class="column is-10">
@@ -86,7 +94,8 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>		
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/js/SweetAlertWrapper.js"></script>		
 	<jsp:invoke fragment="footer"/>	
 </body>
 </html>

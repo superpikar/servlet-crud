@@ -1,0 +1,21 @@
+ul.breadcrumb{
+  outline-style: none;
+  box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+  display: block;
+  padding: 0.75rem;
+  background: #fff;
+}
+ul.breadcrumb li{
+  display: inline-block;
+}
+ul.breadcrumb li.is-active{
+  color: #848484;
+}
+ul.breadcrumb>li+li:before {
+  padding: 0 5px;
+  color: #848484;
+  content: "/\00a0";
+}
+ul.breadcrumb li a:hover{
+  text-decoration: underline;
+}

@@ -54,8 +54,10 @@
     <servlet-name>ShowSource</servlet-name>
     <servlet-class>superpikar.servlet.basic.ShowSource</servlet-class>
   </servlet>
-  
-  <!-- ADMIN CONTROLLER -->
+  <servlet>
+    <servlet-name>FileExplorerController</servlet-name>
+    <servlet-class>superpikar.servlet.admin.controller.FileExplorerController</servlet-class>
+  </servlet>
   <servlet>
     <servlet-name>HomeController</servlet-name>
     <servlet-class>superpikar.servlet.admin.controller.HomeController</servlet-class>
@@ -72,8 +74,10 @@
     <servlet-name>UserController</servlet-name>
     <servlet-class>superpikar.servlet.admin.controller.UserController</servlet-class>
   </servlet>
-  <!-- END OF ADMIN CONTROLLER -->
-  
+  <servlet>
+    <servlet-name>FilesController</servlet-name>
+    <servlet-class>superpikar.servlet.client.controller.FilesController</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>servlet-crud</servlet-name>
     <url-pattern>/</url-pattern>
@@ -110,11 +114,13 @@
     <servlet-name>ShowSource</servlet-name>
     <url-pattern>/show-source</url-pattern>
   </servlet-mapping>
-  
-  <!-- MAPPING OF ADMIN -->
   <servlet-mapping>
     <servlet-name>HomeController</servlet-name>
     <url-pattern>/admin</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FileExplorerController</servlet-name>
+    <url-pattern>/admin/files</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>LoginController</servlet-name>
@@ -128,7 +134,10 @@
     <servlet-name>UserController</servlet-name>
     <url-pattern>/admin/user</url-pattern>
   </servlet-mapping>
-  <!-- END OF ADMIN MAPPING -->
+  <servlet-mapping>
+    <servlet-name>FilesController</servlet-name>
+    <url-pattern>/files/*</url-pattern>
+  </servlet-mapping>
   <listener>
     <listener-class>superpikar.servlet.basic.ConcurrentUserTracker</listener-class>
   </listener>

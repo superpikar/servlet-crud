@@ -11,64 +11,30 @@
 			  	el: '#app',
 			  	methods: {
 			  		confirmRestore: function(id, title) {
-			  			swal({
-				  		  title: 'Are you sure want to restore "'+title+'"',
-				  		  text: "You will not be able to recover the file!",
-				  		  type: "warning",
-				  		  showCancelButton: true,
-				  		  confirmButtonColor: "#DD6B55",
-				  		  confirmButtonText: "Yes, restore it!",
-				  		  cancelButtonText: "No, cancel plx!",
-				  		  closeOnConfirm: false,
-				  		  closeOnCancel: false
-				  		},
-				  		function(isConfirm){
-				  			if (isConfirm) {
-					  		  swal("Restored!", "Your file has been restored.", "success");
-					  		  window.setTimeout(function(){
-					  		  	window.location="${pageContext.request.contextPath}/admin/news?action=restore&id="+id;		  		            
-					  		  }, 1000);
-				  			}
-				  			else{
-				  				swal("Cancelled", "Your file is safe :)", "error");
-				  			}
-				  		});
+			  			SweetAlertWrapper.showWarning({
+			  				title: 'Are you sure want to restore "'+title+'"',
+			  				subtitle: "You will not be able to recover the file!",
+			  				confirmButtonText: "Yes, restore it!",
+			  				cancelButtonText: "No, cancel please",
+			  				messageSuccessTitle: "Restored!",
+	  					   	messageSuccessSubtitle: "Your file has been restored.",
+	  					   	messageCancelTitle: "Cancelled",
+	  					   	messageCancelSubtitle: "Your file is safe :)",
+	  					   	forwardTo: "${pageContext.request.contextPath}/admin/news?action=restore&id="+id
+			  			});
 			  		},
 				  	confirmDelete: function(id, title) {
-				  		swal({
-				  		  title: 'Are you sure want to delete "'+title+'"',
-				  		  text: "You will not be able to recover the file!",
-				  		  type: "warning",
-				  		  showCancelButton: true,
-				  		  confirmButtonColor: "#DD6B55",
-				  		  confirmButtonText: "Yes, delete it!",
-				  		  cancelButtonText: "No, cancel plx!",
-				  		  closeOnConfirm: false,
-				  		  closeOnCancel: false
-				  		},
-				  		function(isConfirm){
-				  		  if (isConfirm) {
-				  		    swal("Deleted!", "Your file has been deleted.", "success");
-				  		    window.setTimeout(function(){
-				  		  		window.location="${pageContext.request.contextPath}/admin/news?action=delete&id="+id;		  		            
-				  		    }, 1000)
-				  		  } else {
-				  		    swal("Cancelled", "Your file is safe :)", "error");
-				  		  }
-				  		});
-			
-						/* vex.dialog.confirm({
-				  		    message: 'Are you sure want to delete "'+title+'"',
-				  		    className: 'vex-theme-plain', // Overwrites defaultOptions,
-				  		    callback: function(value) {
-				  		    	if (value) {
-				  		    		window.location="${pageContext.request.contextPath}/admin/news?action=delete&id="+ID;
-				  		            console.log('Successfully destroyed the planet.', '${pageContext.request.contextPath}/admin/news?action=delete&id='+ID)
-				  		        } else {
-				  		            console.log('Chicken.')
-				  		        }
-				  		    }
-				  		}); */ 	
+				  		SweetAlertWrapper.showWarning({
+			  				title: 'Are you sure want to delete "'+title+'"',
+			  				subtitle: "You will not be able to recover the file!",
+			  				confirmButtonText: "Yes, restore it!",
+			  				cancelButtonText: "No, cancel please",
+			  				messageSuccessTitle: "Deleted!",
+	  					   	messageSuccessSubtitle: "Your file has been deleted.",
+	  					   	messageCancelTitle: "Cancelled",
+	  					   	messageCancelSubtitle: "Your file is safe :)",
+	  					   	forwardTo: "${pageContext.request.contextPath}/admin/news?action=delete&id="+id
+			  			}); 	
 				  	}
 			  	}
 			});			
@@ -97,7 +63,7 @@
 								<figure class="image is-64x64">
 									<c:choose>
 										<c:when test="${not empty post.image}">
-											<img src="${pageContext.request.contextPath}/images/${post.image}" alt="" />
+											<img src="${pageContext.request.contextPath}/files/${post.image}" alt="" />
 										</c:when>
 										<c:otherwise>
 											<img src="http://placehold.it/64x64" alt="" />
