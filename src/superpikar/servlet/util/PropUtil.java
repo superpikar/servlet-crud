@@ -23,6 +23,12 @@ public class PropUtil {
 		return properties.getProperty(key);
 	}
 	
+	public String[] getPropertyAsArray(String key){
+		String[] a = properties.getProperty(key).split(",");
+		
+		return properties.getProperty(key).split(",");
+	}
+	
 	public Properties getProperties(){
 		return properties;
 	}

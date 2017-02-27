@@ -24,16 +24,17 @@ public class UserDao {
 	
 	public int addUser(User user) {
 		try{
-			PreparedStatement preparedStatement = connection.prepareStatement("insert into "+tableName+"(username, password, email, website, image, registerIp, registerUserId, registerDate, deleted) values(?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement preparedStatement = connection.prepareStatement("insert into "+tableName+"(username, password, email, website, image, role, registerIp, registerUserId, registerDate, deleted) values(?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 			preparedStatement.setString(1, user.getUsername());
 			preparedStatement.setString(2, user.getPassword());
 			preparedStatement.setString(3, user.getEmail());
 			preparedStatement.setString(4, user.getWebsite());
 			preparedStatement.setString(5, user.getImage());
-			preparedStatement.setString(6, user.getRegisterIp());
-			preparedStatement.setInt(7,  user.getRegisterUserId());
-			preparedStatement.setDate(8, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
-			preparedStatement.setBoolean(9, false);
+			preparedStatement.setString(6, user.getRole());
+			preparedStatement.setString(7, user.getRegisterIp());
+			preparedStatement.setInt(8,  user.getRegisterUserId());
+			preparedStatement.setDate(9, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
+			preparedStatement.setBoolean(10, false);
 			System.out.println(preparedStatement.toString());
 			preparedStatement.executeUpdate();
 			
@@ -50,16 +51,17 @@ public class UserDao {
 	
 	public int updateUser(User user) {
 		try{
-			PreparedStatement preparedStatement = connection.prepareStatement("update "+tableName+" set username=?, password=?, email=?, website=?, image=?, modificationIp=?, modificationUserId=?, modificationDate=? where id=?");
+			PreparedStatement preparedStatement = connection.prepareStatement("update "+tableName+" set username=?, password=?, email=?, website=?, image=?, role=?, modificationIp=?, modificationUserId=?, modificationDate=? where id=?");
 			preparedStatement.setString(1, user.getUsername());
 			preparedStatement.setString(2, user.getPassword());
 			preparedStatement.setString(3, user.getEmail());
 			preparedStatement.setString(4, user.getWebsite());
 			preparedStatement.setString(5, user.getImage());
-			preparedStatement.setString(6, user.getModificationIp());
-			preparedStatement.setInt(7, user.getModificationUserId());
-			preparedStatement.setDate(8, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
-			preparedStatement.setInt(9, user.getId());
+			preparedStatement.setString(6, user.getRole());
+			preparedStatement.setString(7, user.getModificationIp());
+			preparedStatement.setInt(8, user.getModificationUserId());
+			preparedStatement.setDate(9, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
+			preparedStatement.setInt(10, user.getId());
 			System.out.println(preparedStatement.toString());
 			preparedStatement.executeUpdate();
 		} catch(SQLException e) {
@@ -99,7 +101,7 @@ public class UserDao {
 			System.out.println(preparedStatement.toString());
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {
-				User user = new User(rs.getInt("id"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("website"), rs.getString("image"));
+				User user = new User(rs.getInt("id"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("website"), rs.getString("image"), rs.getString("role"));
 				user.setRegisterProperties(rs.getString("registerIp"), rs.getInt("registerUserId"), rs.getDate("registerDate"));
 				user.setModificationProperties(rs.getString("modificationIp"), rs.getInt("modificationUserId"), rs.getDate("modificationDate"));
 				users.add(user);
@@ -120,7 +122,7 @@ public class UserDao {
 			
 			ResultSet rs = preparedStatement.executeQuery();
 			if(rs.next()) {
-				user.setProperties(rs.getInt("id"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("website"), rs.getString("image"));
+				user.setProperties(rs.getInt("id"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("website"), rs.getString("image"), rs.getString("role"));
 				user.setRegisterProperties(rs.getString("registerIp"), rs.getInt("registerUserId"), rs.getDate("registerDate"));
 				user.setModificationProperties(rs.getString("modificationIp"), rs.getInt("modificationUserId"), rs.getDate("modificationDate"));
 				user.setDeleted(rs.getBoolean("deleted"));
@@ -139,7 +141,7 @@ public class UserDao {
 			
 			ResultSet rs = preparedStatement.executeQuery();
 			if(rs.next()) {
-				user.setProperties(rs.getInt("id"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("website"), rs.getString("image"));
+				user.setProperties(rs.getInt("id"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("website"), rs.getString("image"), rs.getString("role"));
 				user.setRegisterProperties(rs.getString("registerIp"), rs.getInt("registerUserId"), rs.getDate("registerDate"));
 				user.setModificationProperties(rs.getString("modificationIp"), rs.getInt("modificationUserId"), rs.getDate("modificationDate"));
 				user.setDeleted(rs.getBoolean("deleted"));

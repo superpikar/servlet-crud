@@ -26,8 +26,8 @@
 			var app = new Vue({
 			  	el: '#app',
 			  	data: {
-					title: "${post.title}",
-			    	slug: "${post.slug}"
+					title: "${requestScope.post.title}",
+			    	slug: "${requestScope.post.slug}"
 			  	},
 			  	mounted: function() {
 				  	this.editor = new NaverSmartEditor("editor", "${pageContext.request.contextPath}/libs/naversmarteditor/SmartEditor2Skin.html"); 
@@ -72,25 +72,25 @@
 				<label class="label">Thumbnail</label>
 				<div class="control is-grouped">
 					<div class="control is-expanded">
-						<input type="file" name="thumbnail" value="${post.image}"/>
+						<input type="file" name="thumbnail" value="${requestScope.post.image}"/>
 					</div>
 					<div class="control">
-						<p>Preview : ${post.image}</p>
+						<p>Preview : ${requestScope.post.image}</p>
 						<figure class="image is-128x128">
-							<img src="${pageContext.request.contextPath}/images/${post.image}" alt="" />
+							<img src="${pageContext.request.contextPath}/images/${requestScope.post.image}" alt="" />
 						</figure>
 					</div>
 				</div>
 				<label class="label">Content</label>
 				<p class="control">
 					<textarea name="content" id="editor">
-						${post.content} 
+						${requestScope.post.content} 
 					</textarea>						
 				</p>
-				<input type="hidden" name="id" value="${post.id}" />
+				<input type="hidden" name="id" value="${requestScope.post.id}" />
 				<input type="hidden" name="slug" v-bind:value="slug"/>
 				<input type="hidden" name="action" value="${action}"/>
-				<input type="hidden" name="currentThumbnail" value="${post.image}"/>
+				<input type="hidden" name="currentThumbnail" value="${requestScope.post.image}"/>
 			</div>
 			<div class="column is-3">
 				<div class="card">
@@ -102,8 +102,8 @@
 				    		</button>
 				    		<c:if test="${action == 'edit'}">
 				    		<hr />
-				    		<span class="tag">Created : ${post.registerDate}</span><br/>
-				    		<span class="tag">Updated : ${post.modificationDate}</span>
+				    		<span class="tag">Created : ${requestScope.post.registerDate}</span><br/>
+				    		<span class="tag">Updated : ${requestScope.post.modificationDate}</span>
 				    		</c:if>
 				      	</div>
 				    </div>

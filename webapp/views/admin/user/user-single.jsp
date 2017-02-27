@@ -6,13 +6,13 @@
 	<jsp:attribute name="title">
 		<c:choose>
 			<c:when test="${action == 'add'}">
-				<c:set var="title" value="New Post"/>
-				<c:set var="buttonTitle" value="Save Post"/>
+				<c:set var="title" value="New User"/>
+				<c:set var="buttonTitle" value="Save User"/>
 				<c:set var="action" value="add"/>
 			</c:when>
 			<c:otherwise>
-				<c:set var="title" value="Edit Post"/>
-				<c:set var="buttonTitle" value="Update Post"/>
+				<c:set var="title" value="Edit User"/>
+				<c:set var="buttonTitle" value="Update User"/>
 				<c:set var="action" value="edit"/>
 			</c:otherwise>
 		</c:choose>
@@ -23,27 +23,27 @@
 	</jsp:attribute>
 	
 	<jsp:attribute name="footer">
-		<script type="text/javascript" src="${pageContext.request.contextPath}/libs/naversmarteditor/js/service/HuskyEZCreator.js"></script>
-		<script type="text/javascript" src="${pageContext.request.contextPath}/js/NaverSmartEditor.js"></script>
 		<script>
 			var app = new Vue({
 			  	el: '#app',
 			  	data: {
-					title: "${post.title}",
-			    	slug: "${post.slug}"
-			  	},
-			  	mounted: function() {
-				  	this.editor = new NaverSmartEditor("editor", "${pageContext.request.contextPath}/libs/naversmarteditor/SmartEditor2Skin.html"); 
+			  		password: "${requestScope.user.password}",
+			  		confirmPassword: "${requestScope.user.password}"
 			  	},
 			  	methods: {
-				  	updateSlug: function() {
-					  	this.slug = _.kebabCase(this.title)
-				  	},
+			  		isPasswordEqual: function() {
+			  			if(this.confirmPassword==""){
+			  				return false;
+			  			}
+			  			else if(this.confirmPassword==this.password){
+			  				return true;
+			  			}
+			  			else {
+			  				return false;
+			  			}
+					},
 				  	submitForm: function(e) {
-					  	//e.preventDefault();
-					 	var content = this.editor.setEditorValue();
-					  	//console.log(content);
-				  	}
+					}
 			  	}
 			});			
 		</script>
@@ -61,39 +61,77 @@
 			</div>
 		</article>
 		</c:if>
-		<form action="${pageContext.request.contextPath}/admin/news" method="post" enctype="multipart/form-data">
+		<form action="${pageContext.request.contextPath}/admin/user" method="post" enctype="multipart/form-data">
 		<div class="columns">
 			<div class="column is-9">
-				<label class="label">Title</label>
+				<label class="label">Username</label>
 				<p class="control">
-				  	<input class="input" name="title" type="text" placeholder="Title" v-model="title" v-on:keyup="updateSlug"/>
+					<c:if test="${action=='add'}">
+				  	<input class="input" name="username" type="text" placeholder="username"/>
+			      	</c:if>
+			      	<c:if test="${action=='edit'}">
+			      	<!-- SET NAME ATTRIBUTE WITH DISABLED, WILL RESULT NULL VALUE, THEN IT'S BETTER TO REMOVE NAME ATTRIBUTE -->
+			      	<input class="input" type="text" disabled value="${requestScope.user.username}"/>
+			      	<input type="hidden" name="username" value="${requestScope.user.username}" />
+			      	<span class="help">Sorry, username is unchangeable.</span>
+			      	</c:if>
 				</p>
-				<label class="label">Slug</label>
+				<label class="label">Roles</label>
 				<p class="control">
-					<span>{{slug}}</span>
+				  	<span class="select">
+					    <select name="role">
+					    	<c:forEach items="${requestScope.userRoles}" var="role">
+					      	<c:if test="${requestScope.user.role!=role}">
+					      	<option value="${role}">${role}</option>
+					      	</c:if>
+					      	<c:if test="${requestScope.user.role==role}">
+					      	<option value="${role}" selected>${role}</option>
+					      	</c:if>
+					    	</c:forEach>
+					    </select>
+					</span>
+					<span class="help">Please logout to see the result change.</span>
+				</p>
+				<label class="label">Password</label>
+				<p class="control">
+				  	<input class="input" name="password" type="password" v-model="password"/>
+				</p>
+				<label class="label">Confirm password</label>
+				<p class="control has-icon has-icon-right">
+				  	<input class="input" name="confirmpassword" type="password" v-model="confirmPassword" v-bind:class="{'is-danger': !isPasswordEqual(), 'is-success': isPasswordEqual()}"/>
+				  	<span class="icon is-small" v-if="!isPasswordEqual()">
+					    <i class="fa fa-warning"></i>
+				  	</span>
+				  	<span class="help is-danger" v-if="!isPasswordEqual()">Password not equal</span>
+				  	
+				  	<span class="icon is-small" v-if="isPasswordEqual()">
+					    <i class="fa fa-check"></i>
+					</span>
+					<span class="help is-success" v-if="isPasswordEqual()">Good! password is equal</span>
+				</p>
+				<label class="label">Email</label>
+				<p class="control">
+				  	<input class="input" name="email" type="text" placeholder="username@mail.com" value="${requestScope.user.email}"/>
+				</p>
+				<label class="label">Website</label>
+				<p class="control">
+				  	<input class="input" name="website" type="text" placeholder="http://yourwebsite.com" value="${requestScope.user.website}"/>
 				</p>
 				<label class="label">Thumbnail</label>
 				<div class="control is-grouped">
 					<div class="control is-expanded">
-						<input type="file" name="thumbnail" value="${post.image}"/>
+						<input type="file" name="thumbnail" value="${requestScope.user.image}"/>
 					</div>
 					<div class="control">
-						<p>Preview : ${post.image}</p>
+						<p>Preview : ${user.image}</p>
 						<figure class="image is-128x128">
-							<img src="${pageContext.request.contextPath}/images/${post.image}" alt="" />
+							<img src="${pageContext.request.contextPath}/images/${requestScope.user.image}" alt="" />
 						</figure>
 					</div>
 				</div>
-				<label class="label">Content</label>
-				<p class="control">
-					<textarea name="content" id="editor">
-						${post.content} 
-					</textarea>						
-				</p>
-				<input type="hidden" name="id" value="${post.id}" />
-				<input type="hidden" name="slug" v-bind:value="slug"/>
+				<input type="hidden" name="id" value="${requestScope.user.id}" />
 				<input type="hidden" name="action" value="${action}"/>
-				<input type="hidden" name="currentThumbnail" value="${post.image}"/>
+				<input type="hidden" name="currentThumbnail" value="${requestScope.user.image}"/>
 			</div>
 			<div class="column is-3">
 				<div class="card">
@@ -105,8 +143,8 @@
 				    		</button>
 				    		<c:if test="${action == 'edit'}">
 				    		<hr />
-				    		<span class="tag">Created : ${post.registerDate}</span><br/>
-				    		<span class="tag">Updated : ${post.modificationDate}</span>
+				    		<span class="tag">Created : ${requestScope.user.registerDate}</span><br/>
+				    		<span class="tag">Updated : ${requestScope.user.modificationDate}</span>
 				    		</c:if>
 				      	</div>
 				    </div>

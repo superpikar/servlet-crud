@@ -56,7 +56,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${posts}" var="post">
+						<c:forEach items="${requestScope.posts}" var="post">
 						<tr>
 							<td><a href="${pageContext.request.contextPath}/admin/news?action=edit&id=${post.id}">${post.title}</a></td>
 							<td>

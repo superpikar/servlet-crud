@@ -35,21 +35,14 @@ public class HomeController extends HttpServlet {
 		HttpSession session = request.getSession();
 		String page = "";
 		
-		if(session.getAttribute("user") == null){
-			response.sendRedirect(request.getContextPath()+"/admin/login");
+		if(action==null){
+			RequestDispatcher view = request.getRequestDispatcher(TEMPLATE);
+			view.forward(request, response);
 		}
-		else{
-			if(action==null){
-				RequestDispatcher view = request.getRequestDispatcher(TEMPLATE);
-				view.forward(request, response);
-			}
-			else if(action.equalsIgnoreCase("logout")) {
-				// DELETE THE SESSION HERE
-				// SET MESSAGE LOGOUT SUCCESS
-				// GO TO LOGIN PAGE WITH MESSAGE
-				session.removeAttribute("user");
-				response.sendRedirect(request.getContextPath()+"/admin/login");
-			}
+		else if(action.equalsIgnoreCase("logout")) {
+			// DELETE THE SESSION >> SET MESSAGE LOGOUT SUCCESS >> GO TO LOGIN PAGE WITH MESSAGE
+			session.removeAttribute("user");
+			response.sendRedirect(request.getContextPath()+"/admin/login");
 		}
 		
 	}

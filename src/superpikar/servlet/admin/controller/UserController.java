@@ -38,49 +38,46 @@ public class UserController extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		propUtil = new PropUtil(getServletContext());
 		HttpSession session = request.getSession();
 		String action = request.getParameter("action");
 		String page = "";
 		
-		if(session.getAttribute("user") == null){
-			response.sendRedirect(request.getContextPath()+"/admin/login");
+		if(action==null){
+			session.removeAttribute("message");	// clear session
+			request.setAttribute("users", userDao.getAllUsers(false));			
+			page = TEMPLATE_LIST;
 		}
 		else {
-			if(action==null){
-				session.removeAttribute("message");	// clear session
-				request.setAttribute("users", userDao.getAllUsers(false));			
+			if(action.equalsIgnoreCase("trash")) {
+				request.setAttribute("users", userDao.getAllUsers(true));			
 				page = TEMPLATE_LIST;
 			}
-			else {
-				if(action.equalsIgnoreCase("trash")) {
-					request.setAttribute("users", userDao.getAllUsers(true));			
-					page = TEMPLATE_LIST;
-				}
-				else if(action.equalsIgnoreCase("add")) {
-					page = TEMPLATE_SINGLE;
-				}
-				else if(action.equalsIgnoreCase("edit")) {
-					int id= Integer.parseInt(request.getParameter("id"));
-					request.setAttribute("post", userDao.getUserById(id));
-					page = TEMPLATE_SINGLE;
-				}
-				else if(action.equalsIgnoreCase("delete")) {
-					int id= Integer.parseInt(request.getParameter("id"));
-					userDao.deleteUser(id, true);
-					request.setAttribute("users", userDao.getAllUsers(false));	
-					page = TEMPLATE_LIST;
-				}
-				else if(action.equalsIgnoreCase("restore")) {
-					int id= Integer.parseInt(request.getParameter("id"));
-					userDao.deleteUser(id, false);
-					request.setAttribute("users", userDao.getAllUsers(true));	
-					page = TEMPLATE_LIST;
-				}
-			}			
-			request.setAttribute("action", action);
-			RequestDispatcher view = request.getRequestDispatcher(page);
-			view.forward(request, response);
-		}		
+			else if(action.equalsIgnoreCase("add")) {
+				page = TEMPLATE_SINGLE;
+			}
+			else if(action.equalsIgnoreCase("edit")) {
+				int id= Integer.parseInt(request.getParameter("id"));
+				request.setAttribute("user", userDao.getUserById(id));
+				page = TEMPLATE_SINGLE;
+			}
+			else if(action.equalsIgnoreCase("delete")) {
+				int id= Integer.parseInt(request.getParameter("id"));
+				userDao.deleteUser(id, true);
+				request.setAttribute("users", userDao.getAllUsers(false));	
+				page = TEMPLATE_LIST;
+			}
+			else if(action.equalsIgnoreCase("restore")) {
+				int id= Integer.parseInt(request.getParameter("id"));
+				userDao.deleteUser(id, false);
+				request.setAttribute("users", userDao.getAllUsers(true));	
+				page = TEMPLATE_LIST;
+			}
+		}			
+		request.setAttribute("action", action);
+		request.setAttribute("userRoles", propUtil.getPropertyAsArray("roles.groups"));
+		RequestDispatcher view = request.getRequestDispatcher(page);
+		view.forward(request, response);		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -101,6 +98,7 @@ public class UserController extends HttpServlet {
 			user.setPassword(request.getParameter("password"));
 			user.setEmail(request.getParameter("email"));
 			user.setWebsite(request.getParameter("website"));
+			user.setRole(request.getParameter("role"));
 			
 			Part filePart = request.getPart("thumbnail"); // Retrieves <input type="file" name="thumbnail">
 			

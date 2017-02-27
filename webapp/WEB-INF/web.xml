@@ -141,4 +141,12 @@
   <listener>
     <listener-class>superpikar.servlet.basic.ConcurrentUserTracker</listener-class>
   </listener>
+  <filter>
+    <filter-name>LoginFilter</filter-name>
+    <filter-class>superpikar.servlet.admin.filter.LoginFilter</filter-class>
+  </filter>
+  <filter-mapping>
+	<filter-name>LoginFilter</filter-name>
+	<url-pattern>/admin/*</url-pattern>
+  </filter-mapping>
 </web-app>

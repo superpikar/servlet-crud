@@ -33,22 +33,24 @@ public class User extends BaseModel {
 	private String email;
 	private String website;
 	private String image;
+	private String role;
 	
 	public User(){
 		
 	}
 	
-	public User(int id, String username, String password, String email, String website, String image){
-		setProperties(id, username, password, email, website, image);
+	public User(int id, String username, String password, String email, String website, String image, String role){
+		setProperties(id, username, password, email, website, image, role);
 	}
 	
-	public void setProperties(int id, String username, String password, String email, String website, String image){
+	public void setProperties(int id, String username, String password, String email, String website, String image, String role){
 		this.setId(id);
 		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.website = website;
 		this.image = image;
+		this.role = role;
 	}
 	
 	public String getUsername() {
@@ -80,5 +82,13 @@ public class User extends BaseModel {
 	}
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}	
 }

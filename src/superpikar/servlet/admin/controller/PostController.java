@@ -41,10 +41,6 @@ public class PostController extends HttpServlet {
 		String action = request.getParameter("action");
 		String page = "";
 		
-		if(session.getAttribute("user") == null){
-			response.sendRedirect(request.getContextPath()+"/admin/login");
-		}
-		else {
 			if(action==null){
 				session.removeAttribute("message");	// clear session
 				request.setAttribute("posts", postDao.getAllPosts(false));			
@@ -78,8 +74,7 @@ public class PostController extends HttpServlet {
 			}			
 			request.setAttribute("action", action);
 			RequestDispatcher view = request.getRequestDispatcher(page);
-			view.forward(request, response);
-		}		
+			view.forward(request, response);		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

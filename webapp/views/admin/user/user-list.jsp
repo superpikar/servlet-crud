@@ -56,7 +56,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${users}" var="user">
+						<c:forEach items="${requestScope.users}" var="user">
 						<tr>
 							<td><a href="${pageContext.request.contextPath}/admin/user?action=edit&id=${user.id}">${user.username}</a></td>
 							<td>
