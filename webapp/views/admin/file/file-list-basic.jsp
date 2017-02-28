@@ -2,7 +2,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<t:layout-admin>
+<t:layout-adminbasic>
 	<jsp:attribute name="title">File Explorer</jsp:attribute>
 	<jsp:attribute name="footer">
 		<script>
@@ -18,4 +18,4 @@
 	<jsp:body>
 		<c:import url="_file-list.jsp"></c:import>
 	</jsp:body>
-</t:layout-admin>
+</t:layout-adminbasic>

@@ -21,6 +21,7 @@ import superpikar.servlet.util.PropUtil;
 public class FileExplorerController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final String TEMPLATE_LIST = "/views/admin/file/file-list.jsp";
+	private final String TEMPLATE_LIST_BASIC = "/views/admin/file/file-list-basic.jsp";
 	private final String TEMPLATE_SINGLE = "/views/admin/file/file-single.jsp";
        
     public FileExplorerController() {
@@ -68,6 +69,7 @@ public class FileExplorerController extends HttpServlet {
 		
 		String page = "";
 		String action = request.getParameter("action");
+		String layout = request.getParameter("layout");
 		String dir = request.getParameter("dir");
 		String rebuildDir = propUtil.getProperty("UPLOAD_DIR")+buildDirectoryString(dir);		
 		
@@ -90,11 +92,20 @@ public class FileExplorerController extends HttpServlet {
 				}
 			}
 			dir = dir==null? "" : dir+"/";	// formatting GET['dir'] for the next request 
+			layout = layout==null? "normal": layout;
+			
+			if(layout.equalsIgnoreCase("basic")) {
+				page = TEMPLATE_LIST_BASIC;
+			}
+			else {
+				page = TEMPLATE_LIST;	
+			}
+			
+			request.setAttribute("layout", layout);
 			request.setAttribute("dir", dir);
 			request.setAttribute("dirSplit", splitDirectory(dir));
 			request.setAttribute("files", files);
 			System.out.println("open: "+rebuildDir+" | path: "+dir+" | hashmap length: "+splitDirectory(dir).size());
-			page = TEMPLATE_LIST;
 		}
 		RequestDispatcher view = request.getRequestDispatcher(page);
 		view.forward(request, response);

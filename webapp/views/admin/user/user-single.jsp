@@ -19,9 +19,6 @@
 		<c:out value="${title}" />
 	</jsp:attribute>
 	
-	<jsp:attribute name="header">
-	</jsp:attribute>
-	
 	<jsp:attribute name="footer">
 		<script>
 			var app = new Vue({

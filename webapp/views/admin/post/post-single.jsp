@@ -18,19 +18,31 @@
 		</c:choose>
 		<c:out value="${title}" />
 	</jsp:attribute>
-
-	<jsp:attribute name="footer">
+		<jsp:attribute name="footer">
 		<script type="text/javascript" src="${pageContext.request.contextPath}/libs/naversmarteditor/js/service/HuskyEZCreator.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/NaverSmartEditor.js"></script>
 		<script>
+		
+			function clickModel(){
+				console.log('click model');
+				$('.modal iframe').contents().find('.card').click(function(){
+					alert('hello from iframe');
+				});
+			}
+			
 			var app = new Vue({
 			  	el: '#app',
 			  	data: {
 					title: "${requestScope.post.title}",
-			    	slug: "${requestScope.post.slug}"
+			    	slug: "${requestScope.post.slug}",
+			    	showModal: false
 			  	},
 			  	mounted: function() {
-				  	this.editor = new NaverSmartEditor("editor", "${pageContext.request.contextPath}/libs/naversmarteditor/SmartEditor2Skin.html"); 
+			 	  	this.editor = new NaverSmartEditor("editor", "${pageContext.request.contextPath}/libs/naversmarteditor/SmartEditor2Skin.html");
+			 	  	
+			 	  	window.setTimeout(function(){
+			 	  		clickModel();
+			 	  	}, 1000);
 			  	},
 			  	methods: {
 				  	updateSlug: function() {
@@ -40,9 +52,12 @@
 					  	//e.preventDefault();
 					 	var content = this.editor.setEditorValue();
 					  	//console.log(content);
+				  	},
+				  	showFileExplorer: function(isShow){
+				  		this.showModal = isShow;
 				  	}
 			  	}
-			});			
+			});
 		</script>
 	</jsp:attribute>
 	
@@ -73,6 +88,7 @@
 				<div class="control is-grouped">
 					<div class="control is-expanded">
 						<input type="file" name="thumbnail" value="${requestScope.post.image}"/>
+						<a href="#" class="button is-primary" v-on:click="showFileExplorer(true)">Select image</a>
 					</div>
 					<div class="control">
 						<p>Preview : ${requestScope.post.image}</p>
@@ -111,5 +127,6 @@
 			</div>
 		</div>
 	</form>
+	<c:import url="../file/_modal-file-explorer.jsp"></c:import>
 	</jsp:body>
 </t:layout-admin>

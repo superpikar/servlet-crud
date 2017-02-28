@@ -7,15 +7,14 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title><jsp:invoke fragment="title" /></title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css"></link>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
-	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/style.css"></link>
+	
+	<!-- use JSP include because when using c:import cannot be rendered on iframe -->
+	<%@ include file="_header.jsp" %>
 	<jsp:invoke fragment="header"/>	
 </head>
 <body>
 	<jsp:doBody/>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
+	<%@ include file="_footer.jsp" %>
 	<jsp:invoke fragment="footer"/>	
 </body>
 </html>
