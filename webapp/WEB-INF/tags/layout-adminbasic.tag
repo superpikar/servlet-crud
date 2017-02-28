@@ -9,12 +9,12 @@
 	<title><jsp:invoke fragment="title" /></title>
 	
 	<!-- use JSP include because when using c:import cannot be rendered on iframe -->
-	<%@ include file="_header.jsp" %>
+	<%@ include file="_header-admin.jsp" %>
 	<jsp:invoke fragment="header"/>	
 </head>
 <body>
 	<jsp:doBody/>
-	<%@ include file="_footer.jsp" %>
+	<%@ include file="_footer-admin.jsp" %>
 	<jsp:invoke fragment="footer"/>	
 </body>
 </html>

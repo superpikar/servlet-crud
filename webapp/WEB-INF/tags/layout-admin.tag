@@ -10,7 +10,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title><jsp:invoke fragment="title" /></title>
 	
-	<c:import url="/WEB-INF/tags/_header.jsp"></c:import>
+	<%@ include file="_header-admin.jsp" %>
 	<jsp:invoke fragment="header"/>	
 </head>
 <body>
@@ -97,7 +97,7 @@
 			</div>
 		</div>
 	</div>
-	<c:import url="/WEB-INF/tags/_footer.jsp"></c:import>
+	<%@ include file="_footer-admin.jsp" %>
 	<jsp:invoke fragment="footer"/>	
 </body>
 </html>

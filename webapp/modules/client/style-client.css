@@ -1,0 +1,26 @@
+/**
+	style 
+	from https://dansup.github.io/bulma-templates/templates/blog.html
+*/
+#app{
+	margin: 40px auto;
+}
+
+.blog-posts .blog-post{
+  padding: 40px 30px;
+}
+
+.blog-posts .blog-timestamp {
+  font-weight: bold;
+}
+
+.blog-posts .blog-title {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.blog-posts .blog-summary {
+  font-size: 18px;
+  font-weight:lighter;
+  line-height: 1.5;
+}

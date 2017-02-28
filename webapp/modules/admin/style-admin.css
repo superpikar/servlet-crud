@@ -1,0 +1,22 @@
+#app{
+	margin: 40px auto;
+}
+
+.file-explorer .image{
+	height: 150px;
+	width: 100%;
+}
+.file-explorer .image.is-directory{
+	padding: 25%;
+	text-align: center;
+}
+
+.modal.file-explorer-container .modal-content,
+.modal.file-explorer-container iframe{
+	width: 960px;
+	height: 720px;
+	background: white;
+}
+.modal.file-explorer-container iframe{
+	padding: 10px;
+}

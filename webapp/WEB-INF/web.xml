@@ -75,6 +75,10 @@
     <servlet-class>superpikar.servlet.admin.controller.UserController</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>HomeClientController</servlet-name>
+    <servlet-class>superpikar.servlet.client.controller.HomeClientController</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>FilesController</servlet-name>
     <servlet-class>superpikar.servlet.client.controller.FilesController</servlet-class>
   </servlet>
@@ -138,6 +142,10 @@
     <servlet-name>FilesController</servlet-name>
     <url-pattern>/files/*</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>HomeClientController</servlet-name>
+    <url-pattern>/home</url-pattern>
+  </servlet-mapping>
   <listener>
     <listener-class>superpikar.servlet.basic.ConcurrentUserTracker</listener-class>
   </listener>
@@ -146,7 +154,7 @@
     <filter-class>superpikar.servlet.admin.filter.LoginFilter</filter-class>
   </filter>
   <filter-mapping>
-	<filter-name>LoginFilter</filter-name>
-	<url-pattern>/admin/*</url-pattern>
+    <filter-name>LoginFilter</filter-name>
+    <url-pattern>/admin/*</url-pattern>
   </filter-mapping>
 </web-app>

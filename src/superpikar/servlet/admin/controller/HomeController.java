@@ -23,17 +23,11 @@ import superpikar.servlet.admin.model.User;
 
 public class HomeController extends HttpServlet {      
 	private static final long serialVersionUID = 1L;
-	private UserDao userDao;
 	private final String TEMPLATE = "/views/admin/home/index.jsp";
 	
-	public HomeController() {
-		userDao = new UserDao();
-	}
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
 		HttpSession session = request.getSession();
-		String page = "";
 		
 		if(action==null){
 			RequestDispatcher view = request.getRequestDispatcher(TEMPLATE);
