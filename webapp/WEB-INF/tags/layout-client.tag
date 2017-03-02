@@ -17,7 +17,7 @@
 	<nav class="nav has-shadow">
 		<div class="container">
 	  	<div class="nav-left">
-	    	<a class="nav-item">
+	    	<a class="nav-item" href="${pageContext.request.contextPath}">
 	    		<h1 class="title">My Blog</h1>
 	      		<!-- <img src="http://bulma.io/images/bulma-logo.png" alt="Bulma logo"> -->
 	    	</a>

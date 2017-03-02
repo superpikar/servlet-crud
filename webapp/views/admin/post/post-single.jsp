@@ -38,7 +38,8 @@
 			    	showModal: false
 			  	},
 			  	mounted: function() {
-			 	  	this.editor = new NaverSmartEditor("editor", "${pageContext.request.contextPath}/libs/naversmarteditor/SmartEditor2Skin.html");
+			 	  	this.contentEditor = new NaverSmartEditor("content", "${pageContext.request.contextPath}/libs/naversmarteditor/SmartEditor2Skin.html");
+			 	  	this.summaryEditor = new NaverSmartEditor("summary", "${pageContext.request.contextPath}/libs/naversmarteditor/SmartEditor2Skin.html");
 			 	  	
 			 	  	window.setTimeout(function(){
 			 	  		clickModel();
@@ -50,7 +51,8 @@
 				  	},
 				  	submitForm: function(e) {
 					  	//e.preventDefault();
-					 	var content = this.editor.setEditorValue();
+					 	this.contentEditor.setEditorValue();
+					 	this.summaryEditor.setEditorValue();
 					  	//console.log(content);
 				  	},
 				  	showFileExplorer: function(isShow){
@@ -97,9 +99,15 @@
 						</figure>
 					</div>
 				</div>
+				<label class="label">Summary</label>
+				<p class="control">
+					<textarea name="summary" id="summary">
+						${requestScope.post.summary} 
+					</textarea>						
+				</p>
 				<label class="label">Content</label>
 				<p class="control">
-					<textarea name="content" id="editor">
+					<textarea name="content" id="content">
 						${requestScope.post.content} 
 					</textarea>						
 				</p>

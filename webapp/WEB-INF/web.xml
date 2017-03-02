@@ -79,6 +79,10 @@
     <servlet-class>superpikar.servlet.client.controller.HomeClientController</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>PostClientController</servlet-name>
+    <servlet-class>superpikar.servlet.client.controller.PostClientController</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>FilesController</servlet-name>
     <servlet-class>superpikar.servlet.client.controller.FilesController</servlet-class>
   </servlet>
@@ -144,7 +148,11 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>HomeClientController</servlet-name>
-    <url-pattern>/home</url-pattern>
+    <url-pattern></url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PostClientController</servlet-name>
+    <url-pattern>/news</url-pattern>
   </servlet-mapping>
   <listener>
     <listener-class>superpikar.servlet.basic.ConcurrentUserTracker</listener-class>

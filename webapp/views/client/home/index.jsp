@@ -11,13 +11,30 @@
 		<h1 class="title has-text-centered">
 			Cras feugiat euismod sem accumsan ultrices.
 		</h1>
-		<div class="columns is-multiline blog-posts">
+		<div class="blog-posts">
 		<c:forEach items="${requestScope.posts}" var="post">
-			<div class="column is-full-desktop blog-post">
-				<p class="blog-timestamp">${post.modificationDate}</p>
-				<h1 class="blog-title">${post.title}</h1>
-				<div class="blog-summary">
-					${post.content}
+			<div class="columns blog-post">
+				<div class="column is-4">
+					<a href="${pageContext.request.contextPath}/news?id=${post.id}">
+						<img src="${pageContext.request.contextPath}/files/${post.image}" alt="" />
+					</a>
+				</div>
+				<div class="column is-8">
+					<p class="blog-timestamp">
+					<c:choose>
+						<c:when test="${not empty post.modificationDate}">${post.modificationDate}</c:when>
+						<c:otherwise>${post.registerDate}</c:otherwise>
+					</c:choose>
+					</p>
+					<a href="${pageContext.request.contextPath}/news?id=${post.id}">
+					<h1 class="blog-title">${post.title}</h1>
+					</a>
+					<div class="blog-summary">
+						${post.summary}
+						<p>
+						<a href="${pageContext.request.contextPath}/news?id=${post.id}">.... read more</a>
+						</p>
+					</div>
 				</div>
 			</div>
 		</c:forEach>

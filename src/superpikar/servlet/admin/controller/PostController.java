@@ -94,6 +94,7 @@ public class PostController extends HttpServlet {
 			post.setTitle(request.getParameter("title"));
 			post.setSlug(request.getParameter("slug"));
 			post.setContent(request.getParameter("content"));
+			post.setSummary(request.getParameter("summary"));
 			
 			Part filePart = request.getPart("thumbnail"); // Retrieves <input type="file" name="thumbnail">
 			

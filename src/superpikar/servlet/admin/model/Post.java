@@ -7,21 +7,23 @@ public class Post extends BaseModel{
 	private String slug;
 	private String title;
 	private String content;
+	private String summary;
 	private String image;
 	
 	public Post(){
 		
 	}
 	
-	public Post(int id, String title, String slug, String content, String image){
-		setProperties(id, title, slug, content, image);
+	public Post(int id, String title, String slug, String content, String summary, String image){
+		setProperties(id, title, slug, content, summary, image);
 	}
 	
-	public void setProperties(int id, String title, String slug, String content, String image){
+	public void setProperties(int id, String title, String slug, String content, String summary, String image){
 		this.setId(id);
 		this.title = title;
 		this.slug = slug;
 		this.content = content;
+		this.setSummary(summary);
 		this.image = image;
 	}
 	
@@ -43,6 +45,14 @@ public class Post extends BaseModel{
 	public void setContent(String content) {
 		this.content = content;
 	}
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
 	public String getImage() {
 		return image;
 	}

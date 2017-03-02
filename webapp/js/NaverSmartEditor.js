@@ -6,18 +6,17 @@
  */
 NaverSmartEditor = (function(){
 	var _privateVar = "@superpikar";
-	var _selectorID;
-	var _oEditors = [];
 	
 	function NaverSmartEditor(selectorID, sSkinURI) {
-		_selectorID = selectorID;
+		this.selectorID = selectorID;
+		this.oEditors = [];
 
 		// 추가 글꼴 목록
 		//var aAdditionalFontSet = [["MS UI Gothic", "MS UI Gothic"], ["Comic Sans MS", "Comic Sans MS"],["TEST","TEST"]];
 
 		nhn.husky.EZCreator.createInIFrame({
-			oAppRef: _oEditors,
-			elPlaceHolder: selectorID,
+			oAppRef: this.oEditors,
+			elPlaceHolder: this.selectorID,
 			sSkinURI: sSkinURI,
 			htParams : {
 				bUseToolbar : true,				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
@@ -34,13 +33,12 @@ NaverSmartEditor = (function(){
 			},
 			fCreator: "createSEditor2"
 		});
-		
-		this.oEditors = _oEditors;
 	}
 	
 	function setEditorValue(){
-		var content = _oEditors.getById[_selectorID].getIR();
-		document.getElementById(_selectorID).value = content;
+		var content = this.oEditors.getById[this.selectorID].getIR();
+		document.getElementById(this.selectorID).value = content;
+		console.log('#', this.selectorID, content);
 		return content;
 	}
 	
