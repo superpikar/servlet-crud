@@ -7,10 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import superpikar.servlet.admin.model.PaginationResult;
 import superpikar.servlet.admin.model.Post;
@@ -123,7 +120,7 @@ public class PostDao {
 		}		
 		return posts;
 	}
-	
+	  
 	public PaginationResult getPaginationResult(boolean isDeleted, int postPerPage){
 		PaginationResult result = new PaginationResult();
 		try{

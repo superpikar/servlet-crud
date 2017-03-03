@@ -13,7 +13,7 @@
 			Cras feugiat euismod sem accumsan ultrices.
 		</h1>
 		<div class="blog-posts">
-		<c:forEach items="${requestScope.posts}" var="post">
+			<c:forEach items="${requestScope.posts}" var="post">
 			<div class="columns blog-post">
 				<div class="column is-4">
 					<a href="${pageContext.request.contextPath}/news?id=${post.id}">
@@ -38,24 +38,13 @@
 					</div>
 				</div>
 			</div>
-		</c:forEach>
-			<c:set var="firstData" value="${((requestScope.pageNumber-1)*requestScope.paginations.postPerPage) + 1}"></c:set>
-			<c:set var="lastData" value="${firstData-1+fn:length(requestScope.posts)}"></c:set>
-			Showing ${firstData}~${lastData} of ${requestScope.paginations.totalRows}
-			<nav class="pagination">
-				<ul class="pagination-list">
-					<c:forEach items="${requestScope.paginations.paginations}" var="pagination">
-				    <li>
-				    	<c:if test="${requestScope.pageNumber==pagination}">
-				    	<a class="pagination-link is-current" href="${pageContext.request.contextPath}/?page=${pagination}">${pagination}</a>
-				    	</c:if>
-				    	<c:if test="${requestScope.pageNumber!=pagination}">
-				    	<a class="pagination-link" href="${pageContext.request.contextPath}/?page=${pagination}">${pagination}</a>
-				    	</c:if>
-				  	</li>
-					</c:forEach>
-				</ul>
-			</nav>
+			</c:forEach>
+			
+			<c:import url="../shared/_pagination.jsp">
+			  <c:param name="itemsLength" value="${fn:length(requestScope.posts)}"/>
+			  <c:param name="routeTo" value=""/>
+			  <c:param name="queryString" value=""/>
+			</c:import>
 		</div>		
 	</jsp:body>
 </t:layout-client>
