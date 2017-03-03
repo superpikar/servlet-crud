@@ -29,6 +29,7 @@ public class PostController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private PostDao postDao;
 	private PropUtil propUtil;
+	private int postPerPage;
 	private final String TEMPLATE_LIST = "/views/admin/post/post-list.jsp";
 	private final String TEMPLATE_SINGLE = "/views/admin/post/post-single.jsp";
 	
@@ -38,43 +39,47 @@ public class PostController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
+		propUtil = new PropUtil(getServletContext());
+		postPerPage = Integer.valueOf(propUtil.getProperty("post.postperpage"));
 		String action = request.getParameter("action");
-		String page = "";
+		String page = request.getParameter("page");
+		int pageNumber = page==null?1:Integer.parseInt(page);
+		String template = "";		
 		
-			if(action==null){
-				session.removeAttribute("message");	// clear session
-				request.setAttribute("posts", postDao.getAllPosts(false));			
-				page = TEMPLATE_LIST;
+		if(action==null){
+			session.removeAttribute("message");	// clear session				
+			request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage));
+			template = TEMPLATE_LIST;
+		}
+		else {
+			if(action.equalsIgnoreCase("trash")) {
+				request.setAttribute("posts", postDao.getAllPosts(true, pageNumber, postPerPage));			
+				template = TEMPLATE_LIST;
 			}
-			else {
-				if(action.equalsIgnoreCase("trash")) {
-					request.setAttribute("posts", postDao.getAllPosts(true));			
-					page = TEMPLATE_LIST;
-				}
-				else if(action.equalsIgnoreCase("add")) {
-					page = TEMPLATE_SINGLE;
-				}
-				else if(action.equalsIgnoreCase("edit")) {
-					int id= Integer.parseInt(request.getParameter("id"));
-					request.setAttribute("post", postDao.getPostById(id));
-					page = TEMPLATE_SINGLE;
-				}
-				else if(action.equalsIgnoreCase("delete")) {
-					int id= Integer.parseInt(request.getParameter("id"));
-					postDao.deletePost(id, true);
-					request.setAttribute("posts", postDao.getAllPosts(false));	
-					page = TEMPLATE_LIST;
-				}
-				else if(action.equalsIgnoreCase("restore")) {
-					int id= Integer.parseInt(request.getParameter("id"));
-					postDao.deletePost(id, false);
-					request.setAttribute("posts", postDao.getAllPosts(true));	
-					page = TEMPLATE_LIST;
-				}
-			}			
-			request.setAttribute("action", action);
-			RequestDispatcher view = request.getRequestDispatcher(page);
-			view.forward(request, response);		
+			else if(action.equalsIgnoreCase("add")) {
+				template = TEMPLATE_SINGLE;
+			}
+			else if(action.equalsIgnoreCase("edit")) {
+				int id= Integer.parseInt(request.getParameter("id"));
+				request.setAttribute("post", postDao.getPostById(id));
+				template = TEMPLATE_SINGLE;
+			}
+			else if(action.equalsIgnoreCase("delete")) {
+				int id= Integer.parseInt(request.getParameter("id"));
+				postDao.deletePost(id, true);
+				request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage));	
+				template = TEMPLATE_LIST;
+			}
+			else if(action.equalsIgnoreCase("restore")) {
+				int id= Integer.parseInt(request.getParameter("id"));
+				postDao.deletePost(id, false);
+				request.setAttribute("posts", postDao.getAllPosts(true, pageNumber, postPerPage));	
+				template = TEMPLATE_LIST;
+			}
+		}			
+		request.setAttribute("action", action);
+		RequestDispatcher view = request.getRequestDispatcher(template);
+		view.forward(request, response);		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

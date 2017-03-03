@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri='http://java.sun.com/jsp/jstl/functions' prefix='fn'%>
 
 <t:layout-client>
 	<jsp:attribute name="title">
@@ -38,6 +39,23 @@
 				</div>
 			</div>
 		</c:forEach>
-		</div>
+			<c:set var="firstData" value="${((requestScope.pageNumber-1)*requestScope.paginations.postPerPage) + 1}"></c:set>
+			<c:set var="lastData" value="${firstData-1+fn:length(requestScope.posts)}"></c:set>
+			Showing ${firstData}~${lastData} of ${requestScope.paginations.totalRows}
+			<nav class="pagination">
+				<ul class="pagination-list">
+					<c:forEach items="${requestScope.paginations.paginations}" var="pagination">
+				    <li>
+				    	<c:if test="${requestScope.pageNumber==pagination}">
+				    	<a class="pagination-link is-current" href="${pageContext.request.contextPath}/?page=${pagination}">${pagination}</a>
+				    	</c:if>
+				    	<c:if test="${requestScope.pageNumber!=pagination}">
+				    	<a class="pagination-link" href="${pageContext.request.contextPath}/?page=${pagination}">${pagination}</a>
+				    	</c:if>
+				  	</li>
+					</c:forEach>
+				</ul>
+			</nav>
+		</div>		
 	</jsp:body>
 </t:layout-client>

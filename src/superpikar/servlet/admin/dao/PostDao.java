@@ -8,8 +8,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import superpikar.servlet.admin.model.PaginationResult;
 import superpikar.servlet.admin.model.Post;
 import superpikar.servlet.util.DbUtil;
 
@@ -97,11 +100,16 @@ public class PostDao {
 		}
 	}
 	
-	public List<Post> getAllPosts(boolean isDeleted){
+	public List<Post> getAllPosts(boolean isDeleted, int pageNumber, int postPerPage){
+		// TODO add parameter for pageNumber and limit
+		int offset = (pageNumber-1)*postPerPage;
 		List<Post> posts = new ArrayList<Post>();
 		try {
-			PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM "+tableName+" where deleted=? ORDER BY id DESC");
+			// query sample : SELECT * FROM pikarcms_post ORDER BY id LIMIT 2 OFFSET 0
+			PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM "+tableName+" WHERE deleted=? ORDER BY id DESC LIMIT ? OFFSET ?");
 			preparedStatement.setBoolean(1, isDeleted);
+			preparedStatement.setInt(2, postPerPage);
+			preparedStatement.setInt(3, offset);
 			System.out.println(preparedStatement.toString());
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {
@@ -114,6 +122,30 @@ public class PostDao {
 			e.printStackTrace();
 		}		
 		return posts;
+	}
+	
+	public PaginationResult getPaginationResult(boolean isDeleted, int postPerPage){
+		PaginationResult result = new PaginationResult();
+		try{
+			PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(id) AS total FROM "+tableName+" WHERE deleted=?");
+			preparedStatement.setBoolean(1, isDeleted);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				int total = rs.getInt("total");
+				int stepCount = total/postPerPage;
+				ArrayList<Integer> paginations = new ArrayList<Integer>();
+				for(int i=0; i<=stepCount; i++){
+					paginations.add(i+1);
+				}
+				result.setTotalRows(total);
+				result.setPaginations(paginations);
+				result.setPostPerPage(postPerPage);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;		
 	}
 	
 	/**
