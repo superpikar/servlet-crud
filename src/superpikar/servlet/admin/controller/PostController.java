@@ -49,11 +49,13 @@ public class PostController extends HttpServlet {
 		if(action==null){
 			session.removeAttribute("message");	// clear session				
 			request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage));
+			request.setAttribute("paginations", postDao.getPaginationResult(false, postPerPage));
 			template = TEMPLATE_LIST;
 		}
 		else {
 			if(action.equalsIgnoreCase("trash")) {
-				request.setAttribute("posts", postDao.getAllPosts(true, pageNumber, postPerPage));			
+				request.setAttribute("posts", postDao.getAllPosts(true, pageNumber, postPerPage));
+				request.setAttribute("paginations", postDao.getPaginationResult(true, postPerPage));
 				template = TEMPLATE_LIST;
 			}
 			else if(action.equalsIgnoreCase("add")) {
@@ -68,18 +70,19 @@ public class PostController extends HttpServlet {
 				int id= Integer.parseInt(request.getParameter("id"));
 				postDao.deletePost(id, true);
 				request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage));	
+				request.setAttribute("paginations", postDao.getPaginationResult(false, postPerPage));
 				template = TEMPLATE_LIST;
 			}
 			else if(action.equalsIgnoreCase("restore")) {
 				int id= Integer.parseInt(request.getParameter("id"));
 				postDao.deletePost(id, false);
 				request.setAttribute("posts", postDao.getAllPosts(true, pageNumber, postPerPage));	
+				request.setAttribute("paginations", postDao.getPaginationResult(true, postPerPage));
 				template = TEMPLATE_LIST;
 			}
 		}			
 		
 		request.setAttribute("action", action);
-		request.setAttribute("paginations", postDao.getPaginationResult(false, postPerPage));
 		request.setAttribute("pageNumber", pageNumber);
 		
 		RequestDispatcher view = request.getRequestDispatcher(template);

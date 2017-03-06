@@ -57,6 +57,14 @@
 						</tr>
 					</thead>
 					<tbody>
+					<c:if test="${requestScope.paginations.totalRows == 0}">
+						<tr>
+							<td colspan="4" class="has-text-centered">
+								Sorry, no data at the moment.
+							</td>
+						</tr>
+					</c:if>
+					<c:if test="${requestScope.paginations.totalRows > 0}">
 						<c:forEach items="${requestScope.users}" var="user">
 						<tr>
 							<td><a href="${pageContext.request.contextPath}/admin/user?action=edit&id=${user.id}">${user.username}</a></td>
@@ -109,6 +117,7 @@
 							</td>
 						</tr>
 						</c:forEach>
+					</c:if>
 					</tbody>
 				</table>
 				<c:import url="../shared/_pagination.jsp">

@@ -13,6 +13,10 @@
 			Cras feugiat euismod sem accumsan ultrices.
 		</h1>
 		<div class="blog-posts">
+		<c:if test="${requestScope.paginations.totalRows == 0}">
+			<p class="has-text-centered">Sorry, no data at the moment.</p>
+		</c:if>
+		<c:if test="${requestScope.paginations.totalRows > 0}">
 			<c:forEach items="${requestScope.posts}" var="post">
 			<div class="columns blog-post">
 				<div class="column is-4">
@@ -39,12 +43,12 @@
 				</div>
 			</div>
 			</c:forEach>
-			
-			<c:import url="../shared/_pagination.jsp">
-			  <c:param name="itemsLength" value="${fn:length(requestScope.posts)}"/>
-			  <c:param name="routeTo" value=""/>
-			  <c:param name="queryString" value=""/>
-			</c:import>
+		</c:if>
+		<c:import url="../shared/_pagination.jsp">
+		  <c:param name="itemsLength" value="${fn:length(requestScope.posts)}"/>
+		  <c:param name="routeTo" value=""/>
+		  <c:param name="queryString" value=""/>
+		</c:import>
 		</div>		
 	</jsp:body>
 </t:layout-client>
