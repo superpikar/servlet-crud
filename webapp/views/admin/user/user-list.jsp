@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri='http://java.sun.com/jsp/jstl/functions' prefix='fn'%>
 
 <t:layout-admin>
 	<jsp:attribute name="title">User List</jsp:attribute>
@@ -110,6 +111,11 @@
 						</c:forEach>
 					</tbody>
 				</table>
+				<c:import url="../shared/_pagination.jsp">
+				  <c:param name="itemsLength" value="${fn:length(requestScope.users)}"/>
+				  <c:param name="routeTo" value="/admin/user" />
+				  <c:param name="queryString" value=""/>
+				</c:import>
 			</div>
 			<div class="column is-3">
 				<div class="card">

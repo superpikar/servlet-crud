@@ -28,7 +28,7 @@ public class HomeClientController extends HttpServlet {
 		int pageNumber = page==null?1:Integer.parseInt(page);
 		
 		propUtil = new PropUtil(getServletContext());
-    	postPerPage = Integer.valueOf(propUtil.getProperty("client.postperpage"));
+    	postPerPage = Integer.valueOf(propUtil.getProperty("frontend.news.itemsperpage"));
     	request.setAttribute("paginations", postDao.getPaginationResult(false, postPerPage));
 		request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage));
 		request.setAttribute("pageNumber", pageNumber);

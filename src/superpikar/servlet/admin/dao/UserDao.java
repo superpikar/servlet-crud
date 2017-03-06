@@ -1,6 +1,5 @@
 package superpikar.servlet.admin.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,14 +8,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import superpikar.servlet.admin.model.Post;
 import superpikar.servlet.admin.model.User;
 import superpikar.servlet.util.DbUtil;
 
-public class UserDao {
-	private Connection connection;
-	private String tableName;
-	
+public class UserDao extends BaseDao{	
 	public UserDao(){
 		connection = DbUtil.getConnection();
 		tableName = DbUtil.getTableName("user");
@@ -93,11 +88,15 @@ public class UserDao {
 		}
 	}
 	
-	public List<User> getAllUsers(boolean isDeleted){
+	public List<User> getAllUsers(boolean isDeleted, int pageNumber, int postPerPage){
+		int offset = (pageNumber-1)*postPerPage;
 		List<User> users = new ArrayList<User>();
 		try {
-			PreparedStatement preparedStatement = connection.prepareStatement("select * from "+tableName+" where deleted=?");
+			PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM "+tableName+" WHERE deleted=? ORDER BY id DESC LIMIT ? OFFSET ?");
 			preparedStatement.setBoolean(1, isDeleted);
+			preparedStatement.setInt(2, postPerPage);
+			preparedStatement.setInt(3, offset);
+			
 			System.out.println(preparedStatement.toString());
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {

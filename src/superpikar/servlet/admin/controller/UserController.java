@@ -30,6 +30,7 @@ public class UserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UserDao userDao;
 	private PropUtil propUtil;
+	private int postPerPage;
 	private final String TEMPLATE_LIST = "/views/admin/user/user-list.jsp";
 	private final String TEMPLATE_SINGLE = "/views/admin/user/user-single.jsp";
 	
@@ -38,45 +39,54 @@ public class UserController extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		propUtil = new PropUtil(getServletContext());
 		HttpSession session = request.getSession();
+		propUtil = new PropUtil(getServletContext());
 		String action = request.getParameter("action");
-		String page = "";
+		postPerPage = Integer.valueOf(propUtil.getProperty("backend.user.itemsperpage"));
+		String page = request.getParameter("page");
+		int pageNumber = page==null?1:Integer.parseInt(page);
+		String template = "";
 		
 		if(action==null){
 			session.removeAttribute("message");	// clear session
-			request.setAttribute("users", userDao.getAllUsers(false));			
-			page = TEMPLATE_LIST;
+			request.setAttribute("users", userDao.getAllUsers(false, pageNumber, postPerPage));
+			request.setAttribute("paginations", userDao.getPaginationResult(false, postPerPage));
+			template = TEMPLATE_LIST;
 		}
 		else {
 			if(action.equalsIgnoreCase("trash")) {
-				request.setAttribute("users", userDao.getAllUsers(true));			
-				page = TEMPLATE_LIST;
+				request.setAttribute("users", userDao.getAllUsers(true, pageNumber, postPerPage));
+				request.setAttribute("paginations", userDao.getPaginationResult(true, postPerPage));
+				template = TEMPLATE_LIST;
 			}
 			else if(action.equalsIgnoreCase("add")) {
-				page = TEMPLATE_SINGLE;
+				template = TEMPLATE_SINGLE;
 			}
 			else if(action.equalsIgnoreCase("edit")) {
 				int id= Integer.parseInt(request.getParameter("id"));
 				request.setAttribute("user", userDao.getUserById(id));
-				page = TEMPLATE_SINGLE;
+				template = TEMPLATE_SINGLE;
 			}
 			else if(action.equalsIgnoreCase("delete")) {
 				int id= Integer.parseInt(request.getParameter("id"));
 				userDao.deleteUser(id, true);
-				request.setAttribute("users", userDao.getAllUsers(false));	
-				page = TEMPLATE_LIST;
+				request.setAttribute("users", userDao.getAllUsers(false, pageNumber, postPerPage));
+				request.setAttribute("paginations", userDao.getPaginationResult(false, postPerPage));
+				template = TEMPLATE_LIST;
 			}
 			else if(action.equalsIgnoreCase("restore")) {
 				int id= Integer.parseInt(request.getParameter("id"));
 				userDao.deleteUser(id, false);
-				request.setAttribute("users", userDao.getAllUsers(true));	
-				page = TEMPLATE_LIST;
+				request.setAttribute("users", userDao.getAllUsers(true, pageNumber, postPerPage));	
+				request.setAttribute("paginations", userDao.getPaginationResult(true, postPerPage));
+				template = TEMPLATE_LIST;
 			}
 		}			
 		request.setAttribute("action", action);
-		request.setAttribute("userRoles", propUtil.getPropertyAsArray("roles.groups"));
-		RequestDispatcher view = request.getRequestDispatcher(page);
+		request.setAttribute("userRoles", propUtil.getPropertyAsArray("backend.userroles"));
+		request.setAttribute("pageNumber", pageNumber);
+		
+		RequestDispatcher view = request.getRequestDispatcher(template);
 		view.forward(request, response);		
 	}
 

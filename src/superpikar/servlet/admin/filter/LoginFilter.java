@@ -80,7 +80,7 @@ public class LoginFilter implements Filter {
 		boolean isAllowed = false;
 		
 		if(requestURIs.length>1){
-			String[] rolesInPostType = propUtil.getProperty("roles.type."+requestURIs[1]).split(",");
+			String[] rolesInPostType = propUtil.getProperty("backend."+requestURIs[1]+".roles").split(",");
 			for(String role: rolesInPostType){
 				if(user.getRole().equalsIgnoreCase(role)){
 					isAllowed = true;

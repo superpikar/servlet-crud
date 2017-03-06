@@ -40,7 +40,7 @@ public class PostController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		propUtil = new PropUtil(getServletContext());
-		postPerPage = Integer.valueOf(propUtil.getProperty("post.postperpage"));
+		postPerPage = Integer.valueOf(propUtil.getProperty("backend.news.itemsperpage"));
 		String action = request.getParameter("action");
 		String page = request.getParameter("page");
 		int pageNumber = page==null?1:Integer.parseInt(page);
@@ -77,7 +77,11 @@ public class PostController extends HttpServlet {
 				template = TEMPLATE_LIST;
 			}
 		}			
+		
 		request.setAttribute("action", action);
+		request.setAttribute("paginations", postDao.getPaginationResult(false, postPerPage));
+		request.setAttribute("pageNumber", pageNumber);
+		
 		RequestDispatcher view = request.getRequestDispatcher(template);
 		view.forward(request, response);		
 	}

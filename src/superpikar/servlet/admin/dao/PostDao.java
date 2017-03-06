@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import superpikar.servlet.admin.model.BaseModel;
 import superpikar.servlet.admin.model.PaginationResult;
 import superpikar.servlet.admin.model.Post;
 import superpikar.servlet.util.DbUtil;
@@ -17,10 +18,7 @@ import superpikar.servlet.util.DbUtil;
  * inspired by https://danielniko.wordpress.com/2012/04/17/simple-crud-using-jsp-servlet-and-mysql/#comments
  * naming convention https://launchbylunch.com/posts/2014/Feb/16/sql-naming-conventions/
  * */
-public class PostDao {
-	private Connection connection;
-	private String tableName;
-	
+public class PostDao extends BaseDao{	
 	public PostDao(){
 		connection = DbUtil.getConnection();
 		tableName = DbUtil.getTableName("post");
@@ -98,7 +96,6 @@ public class PostDao {
 	}
 	
 	public List<Post> getAllPosts(boolean isDeleted, int pageNumber, int postPerPage){
-		// TODO add parameter for pageNumber and limit
 		int offset = (pageNumber-1)*postPerPage;
 		List<Post> posts = new ArrayList<Post>();
 		try {
@@ -107,6 +104,7 @@ public class PostDao {
 			preparedStatement.setBoolean(1, isDeleted);
 			preparedStatement.setInt(2, postPerPage);
 			preparedStatement.setInt(3, offset);
+			
 			System.out.println(preparedStatement.toString());
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {
@@ -119,30 +117,6 @@ public class PostDao {
 			e.printStackTrace();
 		}		
 		return posts;
-	}
-	  
-	public PaginationResult getPaginationResult(boolean isDeleted, int postPerPage){
-		PaginationResult result = new PaginationResult();
-		try{
-			PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(id) AS total FROM "+tableName+" WHERE deleted=?");
-			preparedStatement.setBoolean(1, isDeleted);
-			ResultSet rs = preparedStatement.executeQuery();
-			while (rs.next()) {
-				int total = rs.getInt("total");
-				int stepCount = total/postPerPage;
-				ArrayList<Integer> paginations = new ArrayList<Integer>();
-				for(int i=0; i<=stepCount; i++){
-					paginations.add(i+1);
-				}
-				result.setTotalRows(total);
-				result.setPaginations(paginations);
-				result.setPostPerPage(postPerPage);
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return result;		
 	}
 	
 	/**
