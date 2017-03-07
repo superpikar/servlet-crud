@@ -52,11 +52,11 @@
 						    <p class="control is-expanded">
 						      	<span class="select">
 								    <select name="condition">
-								    <c:forEach items="${searchConditions}" var="val">
-								    	<c:if test="${val.key==condition}">
+								    <c:forEach items="${requestScope.searchConditions}" var="val">
+								    	<c:if test="${val.key==requestScope.condition}">
 								      	<option selected value="${val.key}">${val.value}</option>
 								    	</c:if>
-								    	<c:if test="${val.key!=condition}">
+								    	<c:if test="${val.key!=requestScope.condition}">
 								      	<option value="${val.key}">${val.value}</option>
 								    	</c:if>							    	
 								    </c:forEach>
@@ -64,18 +64,18 @@
 								</span>
 						    </p>
 						    <p class="control is-expanded">
-						    	<c:if test="${keyword==null}">
+						    	<c:if test="${requestScope.keyword==null}">
 						      	<input name="keyword" class="input" type="text" placeholder="Keyword"/>
 						    	</c:if>
-						    	<c:if test="${keyword!=null}">
-						      	<input name="keyword" class="input is-info" type="text" placeholder="Keyword" value="${keyword}"/>
+						    	<c:if test="${requestScope.keyword!=null}">
+						      	<input name="keyword" class="input is-info" type="text" placeholder="Keyword" value="${requestScope.keyword}"/>
 						    	</c:if>
 						    </p>
 						    <p class="control">
 							    <button class="button is-info">Search</button>
 						  	</p>
 						</div>
-						<input type="hidden" name="action" value="${action}"/>
+						<input type="hidden" name="action" value="${requestScope.action}"/>
 					</form>
 				</div>
 			</div>
@@ -142,7 +142,7 @@
 						  	</a>
 						</p>
 						</c:when>
-						<c:when test="${action == 'trash' || action=='restore' }">
+						<c:when test="${requestScope.action == 'trash' || requestScope.action=='restore' }">
 						<p class="control">
 						  	<a class="button" href="#" v-on:click="confirmRestore(${post.id}, '${post.title}')">
 						    	<span class="icon is-small" alt="restore">
@@ -158,10 +158,11 @@
 			</c:if>
 			</tbody>
 		</table>
-		<c:import url="../shared/_pagination.jsp">
+	  	
+	  	<c:import url="../shared/_pagination.jsp">
 		  <c:param name="itemsLength" value="${fn:length(requestScope.posts)}"/>
 		  <c:param name="routeTo" value="/admin/news" />
-		  <c:param name="queryString" value=""/>
+		  <c:param name="queryString" value="${requestScope.additionalQueryString}"/>		  
 		</c:import>
 	
 	</jsp:body>

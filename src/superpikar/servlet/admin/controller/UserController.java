@@ -84,6 +84,10 @@ public class UserController extends HttpServlet {
 				showIsDelete = true;
 			}
 			
+			if(condition!=null){
+				request.setAttribute("additionalQueryString", "&condition="+condition+"&keyword="+keyword);
+			}
+			
 			request.setAttribute("keyword", keyword);
 			request.setAttribute("condition", condition);
 			request.setAttribute("searchConditions", searchConditions);
@@ -92,39 +96,6 @@ public class UserController extends HttpServlet {
 			request.setAttribute("paginations", userDao.getPaginationResult(showIsDelete, postPerPage, condition, keyword));
 			template = TEMPLATE_LIST;
 		}
-//		if(action.equalsIgnoreCase("list")){
-//			session.removeAttribute("message");	// clear session
-//			request.setAttribute("users", userDao.getAllUsers(false, pageNumber, postPerPage, condition, keyword));
-//			request.setAttribute("paginations", userDao.getPaginationResult(false, postPerPage, condition, keyword));
-//			template = TEMPLATE_LIST;
-//		}
-//		else if(action.equalsIgnoreCase("trash")) {
-//			request.setAttribute("users", userDao.getAllUsers(true, pageNumber, postPerPage, condition, keyword));
-//			request.setAttribute("paginations", userDao.getPaginationResult(true, postPerPage, condition, keyword));
-//			template = TEMPLATE_LIST;
-//		}
-//		else if(action.equalsIgnoreCase("add")) {
-//			template = TEMPLATE_SINGLE;
-//		}
-//		else if(action.equalsIgnoreCase("edit")) {
-//			int id= Integer.parseInt(request.getParameter("id"));
-//			request.setAttribute("user", userDao.getUserById(id));
-//			template = TEMPLATE_SINGLE;
-//		}
-//		else if(action.equalsIgnoreCase("delete")) {
-//			int id= Integer.parseInt(request.getParameter("id"));
-//			userDao.deleteUser(id, true);
-//			request.setAttribute("users", userDao.getAllUsers(false, pageNumber, postPerPage, condition, keyword));
-//			request.setAttribute("paginations", userDao.getPaginationResult(false, postPerPage, condition, keyword));
-//			template = TEMPLATE_LIST;
-//		}
-//		else if(action.equalsIgnoreCase("restore")) {
-//			int id= Integer.parseInt(request.getParameter("id"));
-//			userDao.deleteUser(id, false);
-//			request.setAttribute("users", userDao.getAllUsers(true, pageNumber, postPerPage, condition, keyword));	
-//			request.setAttribute("paginations", userDao.getPaginationResult(true, postPerPage, condition, keyword));
-//			template = TEMPLATE_LIST;
-//		}
 		
 		request.setAttribute("action", action);		
 		RequestDispatcher view = request.getRequestDispatcher(template);
