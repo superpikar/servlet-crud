@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 import javax.servlet.RequestDispatcher;
@@ -32,59 +34,101 @@ public class PostController extends HttpServlet {
 	private int postPerPage;
 	private final String TEMPLATE_LIST = "/views/admin/post/post-list.jsp";
 	private final String TEMPLATE_SINGLE = "/views/admin/post/post-single.jsp";
+	private HashMap<String, String> searchConditions = new HashMap<String, String>();
 	
 	public PostController(){
 		postDao = new PostDao();
+		
+		searchConditions.put("title", "Title");
+		searchConditions.put("content", "Content");
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO ADD FILTER AND SORT FUNCTION
 		HttpSession session = request.getSession();
 		propUtil = new PropUtil(getServletContext());
-		postPerPage = Integer.valueOf(propUtil.getProperty("backend.news.itemsperpage"));
-		String action = request.getParameter("action");
-		String page = request.getParameter("page");
-		int pageNumber = page==null?1:Integer.parseInt(page);
-		String template = "";		
+		String action = request.getParameter("action")==null? "list": request.getParameter("action");
+		String template = "";
 		
-		if(action==null){
-			session.removeAttribute("message");	// clear session				
-			request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage));
-			request.setAttribute("paginations", postDao.getPaginationResult(false, postPerPage));
-			template = TEMPLATE_LIST;
-		}
-		else {
-			if(action.equalsIgnoreCase("trash")) {
-				request.setAttribute("posts", postDao.getAllPosts(true, pageNumber, postPerPage));
-				request.setAttribute("paginations", postDao.getPaginationResult(true, postPerPage));
-				template = TEMPLATE_LIST;
-			}
-			else if(action.equalsIgnoreCase("add")) {
-				template = TEMPLATE_SINGLE;
-			}
-			else if(action.equalsIgnoreCase("edit")) {
+		if(action.equalsIgnoreCase("add")||action.equalsIgnoreCase("edit")) {
+			if(action.equalsIgnoreCase("edit")) {
 				int id= Integer.parseInt(request.getParameter("id"));
 				request.setAttribute("post", postDao.getPostById(id));
-				template = TEMPLATE_SINGLE;
 			}
-			else if(action.equalsIgnoreCase("delete")) {
+			template = TEMPLATE_SINGLE;
+		} 
+		else {
+			String page = request.getParameter("page");
+			postPerPage = Integer.valueOf(propUtil.getProperty("backend.news.itemsperpage"));
+			int pageNumber = page==null?1:Integer.parseInt(page);
+			String condition = request.getParameter("condition");
+			String keyword = request.getParameter("keyword");
+			boolean showIsDelete = false;
+			
+			if(action.equalsIgnoreCase("list")){
+				session.removeAttribute("message");	// clear session
+				showIsDelete = false;
+			}
+			else if(action.equalsIgnoreCase("trash")){
+				showIsDelete = true;				
+			}
+			else if(action.equalsIgnoreCase("delete")){
 				int id= Integer.parseInt(request.getParameter("id"));
 				postDao.deletePost(id, true);
-				request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage));	
-				request.setAttribute("paginations", postDao.getPaginationResult(false, postPerPage));
-				template = TEMPLATE_LIST;
+				showIsDelete = false;
 			}
-			else if(action.equalsIgnoreCase("restore")) {
+			else if(action.equalsIgnoreCase("restore")){
 				int id= Integer.parseInt(request.getParameter("id"));
 				postDao.deletePost(id, false);
-				request.setAttribute("posts", postDao.getAllPosts(true, pageNumber, postPerPage));	
-				request.setAttribute("paginations", postDao.getPaginationResult(true, postPerPage));
-				template = TEMPLATE_LIST;
+				showIsDelete = true;
 			}
-		}			
+			request.setAttribute("keyword", keyword);
+			request.setAttribute("condition", condition);
+			request.setAttribute("searchConditions", searchConditions);
+			request.setAttribute("pageNumber", pageNumber);
+			request.setAttribute("posts", postDao.getAllPosts(showIsDelete, pageNumber, postPerPage, condition, keyword));
+			request.setAttribute("paginations", postDao.getPaginationResult(showIsDelete, postPerPage, condition, keyword));
+			template = TEMPLATE_LIST;
+		}
 		
-		request.setAttribute("action", action);
-		request.setAttribute("pageNumber", pageNumber);
 		
+//		if(action==null){
+//			session.removeAttribute("message");	// clear session				
+//			request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage));
+//			request.setAttribute("paginations", postDao.getPaginationResult(false, postPerPage));
+//			template = TEMPLATE_LIST;
+//		}
+//		else {
+//			if(action.equalsIgnoreCase("trash")) {
+//				request.setAttribute("posts", postDao.getAllPosts(true, pageNumber, postPerPage));
+//				request.setAttribute("paginations", postDao.getPaginationResult(true, postPerPage));
+//				template = TEMPLATE_LIST;
+//			}
+//			else if(action.equalsIgnoreCase("add")) {
+//				template = TEMPLATE_SINGLE;
+//			}
+//			else if(action.equalsIgnoreCase("edit")) {
+//				int id= Integer.parseInt(request.getParameter("id"));
+//				request.setAttribute("post", postDao.getPostById(id));
+//				template = TEMPLATE_SINGLE;
+//			}
+//			else if(action.equalsIgnoreCase("delete")) {
+//				int id= Integer.parseInt(request.getParameter("id"));
+//				postDao.deletePost(id, true);
+//				request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage));	
+//				request.setAttribute("paginations", postDao.getPaginationResult(false, postPerPage));
+//				template = TEMPLATE_LIST;
+//			}
+//			else if(action.equalsIgnoreCase("restore")) {
+//				int id= Integer.parseInt(request.getParameter("id"));
+//				postDao.deletePost(id, false);
+//				request.setAttribute("posts", postDao.getAllPosts(true, pageNumber, postPerPage));	
+//				request.setAttribute("paginations", postDao.getPaginationResult(true, postPerPage));
+//				template = TEMPLATE_LIST;
+//			}
+//		}			
+//		
+		request.setAttribute("action", action);		
 		RequestDispatcher view = request.getRequestDispatcher(template);
 		view.forward(request, response);		
 	}

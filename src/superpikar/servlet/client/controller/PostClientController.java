@@ -42,7 +42,7 @@ public class PostClientController extends HttpServlet {
 			template = TEMPLATE_SINGLE;
 		}
     	else {
-    		request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage));			
+    		request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage, null, null));
     		template = TEMPLATE_LIST;
     	}
     	RequestDispatcher view = request.getRequestDispatcher(template);

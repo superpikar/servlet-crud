@@ -27,7 +27,6 @@ import superpikar.servlet.util.PropUtil;
 public class LoginFilter implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		// TODO error, after login always redirect to /admin when trying to access other menu
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res= (HttpServletResponse) response;
 		HttpSession session = req.getSession(false);

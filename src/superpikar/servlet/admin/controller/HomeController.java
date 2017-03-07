@@ -38,11 +38,8 @@ public class HomeController extends HttpServlet {
 			session.removeAttribute("user");
 			response.sendRedirect(request.getContextPath()+"/admin/login");
 		}
-		
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 	}
-
 }

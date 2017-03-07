@@ -88,16 +88,20 @@ public class UserDao extends BaseDao{
 		}
 	}
 	
-	public List<User> getAllUsers(boolean isDeleted, int pageNumber, int postPerPage){
+	public List<User> getAllUsers(boolean isDeleted, int pageNumber, int postPerPage, String condition, String keyword){
 		int offset = (pageNumber-1)*postPerPage;
 		List<User> users = new ArrayList<User>();
+		
+		PreparedStatement preparedStatement = null;
+		if(condition==null && keyword==null){
+			preparedStatement = setPreparedStatementNormal(isDeleted, postPerPage, offset);
+		}
+		else if(condition!=null) {
+			preparedStatement = setPreparedStatementSearchByKeyword(isDeleted, postPerPage, offset, condition, keyword);
+		}
+		
 		try {
-			PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM "+tableName+" WHERE deleted=? ORDER BY id DESC LIMIT ? OFFSET ?");
-			preparedStatement.setBoolean(1, isDeleted);
-			preparedStatement.setInt(2, postPerPage);
-			preparedStatement.setInt(3, offset);
-			
-			System.out.println(preparedStatement.toString());
+			System.out.println("list query " + preparedStatement.toString());
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {
 				User user = new User(rs.getInt("id"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("website"), rs.getString("image"), rs.getString("role"));

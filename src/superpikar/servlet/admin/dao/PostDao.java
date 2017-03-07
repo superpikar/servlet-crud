@@ -95,17 +95,20 @@ public class PostDao extends BaseDao{
 		}
 	}
 	
-	public List<Post> getAllPosts(boolean isDeleted, int pageNumber, int postPerPage){
+	public List<Post> getAllPosts(boolean isDeleted, int pageNumber, int postPerPage, String condition, String keyword){
 		int offset = (pageNumber-1)*postPerPage;
 		List<Post> posts = new ArrayList<Post>();
 		try {
 			// query sample : SELECT * FROM pikarcms_post ORDER BY id LIMIT 2 OFFSET 0
-			PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM "+tableName+" WHERE deleted=? ORDER BY id DESC LIMIT ? OFFSET ?");
-			preparedStatement.setBoolean(1, isDeleted);
-			preparedStatement.setInt(2, postPerPage);
-			preparedStatement.setInt(3, offset);
+			PreparedStatement preparedStatement = null;
+			if(condition==null && keyword==null){
+				preparedStatement = setPreparedStatementNormal(isDeleted, postPerPage, offset);
+			}
+			else if(condition!=null) {
+				preparedStatement = setPreparedStatementSearchByKeyword(isDeleted, postPerPage, offset, condition, keyword);
+			}
 			
-			System.out.println(preparedStatement.toString());
+			System.out.println("list query " + preparedStatement.toString());
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {
 				Post post = new Post(rs.getInt("id"), rs.getString("title"), rs.getString("slug"), rs.getString("content"), rs.getString("summary"), rs.getString("image"));

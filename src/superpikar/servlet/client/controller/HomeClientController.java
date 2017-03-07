@@ -29,8 +29,8 @@ public class HomeClientController extends HttpServlet {
 		
 		propUtil = new PropUtil(getServletContext());
     	postPerPage = Integer.valueOf(propUtil.getProperty("frontend.news.itemsperpage"));
-    	request.setAttribute("paginations", postDao.getPaginationResult(false, postPerPage));
-		request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage));
+    	request.setAttribute("paginations", postDao.getPaginationResult(false, postPerPage, null, null));
+		request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage, null, null));
 		request.setAttribute("pageNumber", pageNumber);
 		RequestDispatcher view = request.getRequestDispatcher(TEMPLATE);
 		view.forward(request, response);

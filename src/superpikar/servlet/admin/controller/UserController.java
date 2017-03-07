@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Properties;
 
 import javax.servlet.RequestDispatcher;
@@ -33,59 +34,99 @@ public class UserController extends HttpServlet {
 	private int postPerPage;
 	private final String TEMPLATE_LIST = "/views/admin/user/user-list.jsp";
 	private final String TEMPLATE_SINGLE = "/views/admin/user/user-single.jsp";
+	private HashMap<String, String> searchConditions = new HashMap<String, String>();
 	
 	public UserController(){
 		userDao = new UserDao();
+		
+		searchConditions.put("username", "Username");
+		searchConditions.put("email", "Email");
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		propUtil = new PropUtil(getServletContext());
-		String action = request.getParameter("action");
-		postPerPage = Integer.valueOf(propUtil.getProperty("backend.user.itemsperpage"));
-		String page = request.getParameter("page");
-		int pageNumber = page==null?1:Integer.parseInt(page);
+		String action = request.getParameter("action")==null? "list" : request.getParameter("action");
 		String template = "";
 		
-		if(action==null){
-			session.removeAttribute("message");	// clear session
-			request.setAttribute("users", userDao.getAllUsers(false, pageNumber, postPerPage));
-			request.setAttribute("paginations", userDao.getPaginationResult(false, postPerPage));
-			template = TEMPLATE_LIST;
-		}
-		else {
-			if(action.equalsIgnoreCase("trash")) {
-				request.setAttribute("users", userDao.getAllUsers(true, pageNumber, postPerPage));
-				request.setAttribute("paginations", userDao.getPaginationResult(true, postPerPage));
-				template = TEMPLATE_LIST;
-			}
-			else if(action.equalsIgnoreCase("add")) {
-				template = TEMPLATE_SINGLE;
-			}
-			else if(action.equalsIgnoreCase("edit")) {
+		
+		if(action.equalsIgnoreCase("add")||action.equalsIgnoreCase("edit")) {
+			if(action.equalsIgnoreCase("edit")) {
 				int id= Integer.parseInt(request.getParameter("id"));
 				request.setAttribute("user", userDao.getUserById(id));
-				template = TEMPLATE_SINGLE;
+			}
+			template = TEMPLATE_SINGLE;
+			request.setAttribute("userRoles", propUtil.getPropertyAsArray("backend.userroles"));
+		}
+		else {
+			postPerPage = Integer.valueOf(propUtil.getProperty("backend.user.itemsperpage"));
+			String page = request.getParameter("page");
+			int pageNumber = page==null?1:Integer.parseInt(page);
+			String condition = request.getParameter("condition");
+			String keyword = request.getParameter("keyword");
+			boolean showIsDelete = false;
+			
+			if(action.equalsIgnoreCase("list")){
+				session.removeAttribute("message");	// clear session
+				showIsDelete = false;
+			}
+			else if(action.equalsIgnoreCase("trash")) {
+				showIsDelete = true;
 			}
 			else if(action.equalsIgnoreCase("delete")) {
 				int id= Integer.parseInt(request.getParameter("id"));
 				userDao.deleteUser(id, true);
-				request.setAttribute("users", userDao.getAllUsers(false, pageNumber, postPerPage));
-				request.setAttribute("paginations", userDao.getPaginationResult(false, postPerPage));
-				template = TEMPLATE_LIST;
+				showIsDelete = false;
 			}
 			else if(action.equalsIgnoreCase("restore")) {
 				int id= Integer.parseInt(request.getParameter("id"));
 				userDao.deleteUser(id, false);
-				request.setAttribute("users", userDao.getAllUsers(true, pageNumber, postPerPage));	
-				request.setAttribute("paginations", userDao.getPaginationResult(true, postPerPage));
-				template = TEMPLATE_LIST;
+				showIsDelete = true;
 			}
-		}			
-		request.setAttribute("action", action);
-		request.setAttribute("userRoles", propUtil.getPropertyAsArray("backend.userroles"));
-		request.setAttribute("pageNumber", pageNumber);
+			
+			request.setAttribute("keyword", keyword);
+			request.setAttribute("condition", condition);
+			request.setAttribute("searchConditions", searchConditions);
+			request.setAttribute("pageNumber", pageNumber);
+			request.setAttribute("users", userDao.getAllUsers(showIsDelete, pageNumber, postPerPage, condition, keyword));	
+			request.setAttribute("paginations", userDao.getPaginationResult(showIsDelete, postPerPage, condition, keyword));
+			template = TEMPLATE_LIST;
+		}
+//		if(action.equalsIgnoreCase("list")){
+//			session.removeAttribute("message");	// clear session
+//			request.setAttribute("users", userDao.getAllUsers(false, pageNumber, postPerPage, condition, keyword));
+//			request.setAttribute("paginations", userDao.getPaginationResult(false, postPerPage, condition, keyword));
+//			template = TEMPLATE_LIST;
+//		}
+//		else if(action.equalsIgnoreCase("trash")) {
+//			request.setAttribute("users", userDao.getAllUsers(true, pageNumber, postPerPage, condition, keyword));
+//			request.setAttribute("paginations", userDao.getPaginationResult(true, postPerPage, condition, keyword));
+//			template = TEMPLATE_LIST;
+//		}
+//		else if(action.equalsIgnoreCase("add")) {
+//			template = TEMPLATE_SINGLE;
+//		}
+//		else if(action.equalsIgnoreCase("edit")) {
+//			int id= Integer.parseInt(request.getParameter("id"));
+//			request.setAttribute("user", userDao.getUserById(id));
+//			template = TEMPLATE_SINGLE;
+//		}
+//		else if(action.equalsIgnoreCase("delete")) {
+//			int id= Integer.parseInt(request.getParameter("id"));
+//			userDao.deleteUser(id, true);
+//			request.setAttribute("users", userDao.getAllUsers(false, pageNumber, postPerPage, condition, keyword));
+//			request.setAttribute("paginations", userDao.getPaginationResult(false, postPerPage, condition, keyword));
+//			template = TEMPLATE_LIST;
+//		}
+//		else if(action.equalsIgnoreCase("restore")) {
+//			int id= Integer.parseInt(request.getParameter("id"));
+//			userDao.deleteUser(id, false);
+//			request.setAttribute("users", userDao.getAllUsers(true, pageNumber, postPerPage, condition, keyword));	
+//			request.setAttribute("paginations", userDao.getPaginationResult(true, postPerPage, condition, keyword));
+//			template = TEMPLATE_LIST;
+//		}
 		
+		request.setAttribute("action", action);		
 		RequestDispatcher view = request.getRequestDispatcher(template);
 		view.forward(request, response);		
 	}
