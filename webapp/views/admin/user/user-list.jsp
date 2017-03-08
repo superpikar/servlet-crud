@@ -123,9 +123,8 @@
 			</tbody>
 		</table>
 		<c:import url="../shared/_pagination.jsp">
-		  <c:param name="itemsLength" value="${fn:length(requestScope.users)}"/>
 		  <c:param name="routeTo" value="/admin/user" />
-		  <c:param name="queryString" value="${requestScope.additionalQueryString}"/>
+		  	<c:param name="queryString" value="${requestScope.searchQueryString}${requestScope.sortQueryString}"/>
 		</c:import>
 	</jsp:body>
 </t:layout-admin>
