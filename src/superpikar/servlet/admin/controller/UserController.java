@@ -18,6 +18,7 @@ import javax.servlet.http.Part;
 
 import superpikar.servlet.admin.dao.PostDao;
 import superpikar.servlet.admin.dao.UserDao;
+import superpikar.servlet.admin.model.FilterAndSort;
 import superpikar.servlet.admin.model.Post;
 import superpikar.servlet.admin.model.User;
 import superpikar.servlet.util.ImageUtil;
@@ -31,24 +32,29 @@ public class UserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UserDao userDao;
 	private PropUtil propUtil;
-	private int postPerPage;
 	private final String TEMPLATE_LIST = "/views/admin/user/user-list.jsp";
 	private final String TEMPLATE_SINGLE = "/views/admin/user/user-single.jsp";
 	private HashMap<String, String> searchConditions = new HashMap<String, String>();
+	private HashMap<String, String> sortColumns = new HashMap<String, String>();
+	private FilterAndSort filterAndSort = new FilterAndSort();
 	
 	public UserController(){
 		userDao = new UserDao();
 		
 		searchConditions.put("username", "Username");
 		searchConditions.put("email", "Email");
+		sortColumns.put("username", "Username");
+		sortColumns.put("email", "Email");
+		
+		filterAndSort.setSearchConditions(searchConditions);
+		filterAndSort.setSortColumns(sortColumns);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		propUtil = new PropUtil(getServletContext());
 		String action = request.getParameter("action")==null? "list" : request.getParameter("action");
-		String template = "";
-		
+		String template = "";		
 		
 		if(action.equalsIgnoreCase("add")||action.equalsIgnoreCase("edit")) {
 			if(action.equalsIgnoreCase("edit")) {
@@ -59,12 +65,14 @@ public class UserController extends HttpServlet {
 			request.setAttribute("userRoles", propUtil.getPropertyAsArray("backend.userroles"));
 		}
 		else {
-			postPerPage = Integer.valueOf(propUtil.getProperty("backend.user.itemsperpage"));
-			String page = request.getParameter("page");
-			int pageNumber = page==null?1:Integer.parseInt(page);
-			String condition = request.getParameter("condition");
-			String keyword = request.getParameter("keyword");
+			String postPerPage = propUtil.getProperty("backend.user.itemsperpage");
+			String pageNumber = request.getParameter("page");
 			boolean showIsDelete = false;
+			
+			filterAndSort.setCondition(request.getParameter("condition"));
+			filterAndSort.setKeyword(request.getParameter("keyword"));
+			filterAndSort.setSortColumn(request.getParameter("sortColumn"));
+			filterAndSort.setSortOrder(request.getParameter("sortOrder"));
 			
 			if(action.equalsIgnoreCase("list")){
 				session.removeAttribute("message");	// clear session
@@ -84,16 +92,17 @@ public class UserController extends HttpServlet {
 				showIsDelete = true;
 			}
 			
-			if(condition!=null){
-				request.setAttribute("additionalQueryString", "&condition="+condition+"&keyword="+keyword);
+			if(filterAndSort.getCondition()!=null){
+				request.setAttribute("searchQueryString", "&condition="+filterAndSort.getCondition()+"&keyword="+filterAndSort.getKeyword());
 			}
 			
-			request.setAttribute("keyword", keyword);
-			request.setAttribute("condition", condition);
-			request.setAttribute("searchConditions", searchConditions);
-			request.setAttribute("pageNumber", pageNumber);
-			request.setAttribute("users", userDao.getAllUsers(showIsDelete, pageNumber, postPerPage, condition, keyword));	
-			request.setAttribute("paginations", userDao.getPaginationResult(showIsDelete, postPerPage, condition, keyword));
+			if(filterAndSort.getSortColumn()!=null){
+				request.setAttribute("sortQueryString", "&sortColumn="+filterAndSort.getSortColumn()+"&sortOrder="+filterAndSort.getSortOrder());
+			}
+			
+			request.setAttribute("filterAndSort", filterAndSort);
+			request.setAttribute("users", userDao.getAllUsers(showIsDelete, pageNumber, postPerPage, filterAndSort));	
+			request.setAttribute("paginations", userDao.getPaginationResult(showIsDelete, pageNumber, postPerPage, filterAndSort));
 			template = TEMPLATE_LIST;
 		}
 		

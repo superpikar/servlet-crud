@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import superpikar.servlet.admin.model.BaseModel;
+import superpikar.servlet.admin.model.FilterAndSort;
 import superpikar.servlet.admin.model.PaginationResult;
 import superpikar.servlet.admin.model.Post;
 import superpikar.servlet.util.DbUtil;
@@ -20,6 +21,7 @@ import superpikar.servlet.util.DbUtil;
  * */
 public class PostDao extends BaseDao{	
 	public PostDao(){
+		super();
 		connection = DbUtil.getConnection();
 		tableName = DbUtil.getTableName("post");
 //		System.out.print("table "+tableName);
@@ -95,18 +97,12 @@ public class PostDao extends BaseDao{
 		}
 	}
 	
-	public List<Post> getAllPosts(boolean isDeleted, int pageNumber, int postPerPage, String condition, String keyword){
-		int offset = (pageNumber-1)*postPerPage;
+	public List<Post> getAllPosts(boolean isDeleted, String pageNumber, String postPerPage, FilterAndSort filterAndSort){
+		
 		List<Post> posts = new ArrayList<Post>();
 		try {
 			// query sample : SELECT * FROM pikarcms_post ORDER BY id LIMIT 2 OFFSET 0
-			PreparedStatement preparedStatement = null;
-			if(condition==null && keyword==null){
-				preparedStatement = setPreparedStatementNormal(isDeleted, postPerPage, offset);
-			}
-			else if(condition!=null) {
-				preparedStatement = setPreparedStatementSearchByKeyword(isDeleted, postPerPage, offset, condition, keyword);
-			}
+			PreparedStatement preparedStatement = setPreparedStatementGetRows(isDeleted, pageNumber, postPerPage, filterAndSort);
 			
 			System.out.println("list query " + preparedStatement.toString());
 			ResultSet rs = preparedStatement.executeQuery();

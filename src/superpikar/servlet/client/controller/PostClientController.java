@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import superpikar.servlet.admin.dao.PostDao;
+import superpikar.servlet.admin.model.FilterAndSort;
 import superpikar.servlet.util.PropUtil;
 
 /**
@@ -21,7 +22,7 @@ public class PostClientController extends HttpServlet {
 	private final String TEMPLATE_SINGLE = "/views/client/post/post-single.jsp";
 	private PostDao postDao;
 	private PropUtil propUtil;
-	private int postPerPage;
+	private FilterAndSort filterAndSort = new FilterAndSort();
 	
 	public PostClientController() {
 		postDao = new PostDao();
@@ -29,12 +30,11 @@ public class PostClientController extends HttpServlet {
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String id = request.getParameter("id");
-    	String page = request.getParameter("page");
-		int pageNumber = page==null?1:Integer.parseInt(page);
-    	String template = "";
+		String template = "";
     	
     	propUtil = new PropUtil(getServletContext());
-    	postPerPage = Integer.valueOf(propUtil.getProperty("client.postperpage"));
+    	String pageNumber = request.getParameter("page");
+    	String postPerPage = propUtil.getProperty("client.postperpage");
 		
     	
     	if(id!=null){
@@ -42,7 +42,7 @@ public class PostClientController extends HttpServlet {
 			template = TEMPLATE_SINGLE;
 		}
     	else {
-    		request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage, null, null));
+    		request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage, filterAndSort));
     		template = TEMPLATE_LIST;
     	}
     	RequestDispatcher view = request.getRequestDispatcher(template);

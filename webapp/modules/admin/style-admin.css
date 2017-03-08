@@ -24,3 +24,6 @@
 .select, .select select {
 	width: 100%;
 }
+.select.is-info select{
+    border-color: #3273dc;
+}

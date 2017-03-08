@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import superpikar.servlet.admin.model.FilterAndSort;
 import superpikar.servlet.admin.model.User;
 import superpikar.servlet.util.DbUtil;
 
@@ -88,19 +89,10 @@ public class UserDao extends BaseDao{
 		}
 	}
 	
-	public List<User> getAllUsers(boolean isDeleted, int pageNumber, int postPerPage, String condition, String keyword){
-		int offset = (pageNumber-1)*postPerPage;
-		List<User> users = new ArrayList<User>();
-		
-		PreparedStatement preparedStatement = null;
-		if(condition==null && keyword==null){
-			preparedStatement = setPreparedStatementNormal(isDeleted, postPerPage, offset);
-		}
-		else if(condition!=null) {
-			preparedStatement = setPreparedStatementSearchByKeyword(isDeleted, postPerPage, offset, condition, keyword);
-		}
-		
+	public List<User> getAllUsers(boolean isDeleted, String pageNumber, String postPerPage, FilterAndSort filterAndSort){
+		List<User> users = new ArrayList<User>();		
 		try {
+			PreparedStatement preparedStatement = setPreparedStatementGetRows(isDeleted, pageNumber, postPerPage, filterAndSort);
 			System.out.println("list query " + preparedStatement.toString());
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {

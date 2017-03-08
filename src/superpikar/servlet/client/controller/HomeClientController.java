@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import superpikar.servlet.admin.dao.PostDao;
+import superpikar.servlet.admin.model.FilterAndSort;
 import superpikar.servlet.util.PropUtil;
 
 public class HomeClientController extends HttpServlet {
@@ -17,20 +18,20 @@ public class HomeClientController extends HttpServlet {
 	private final String TEMPLATE = "/views/client/home/index.jsp";
 	private PostDao postDao;
 	private PropUtil propUtil;
-	private int postPerPage;
+	private FilterAndSort filterAndSort = new FilterAndSort();
        
     public HomeClientController() {
     	postDao = new PostDao();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String page = request.getParameter("page");
-		int pageNumber = page==null?1:Integer.parseInt(page);
 		
 		propUtil = new PropUtil(getServletContext());
-    	postPerPage = Integer.valueOf(propUtil.getProperty("frontend.news.itemsperpage"));
-    	request.setAttribute("paginations", postDao.getPaginationResult(false, postPerPage, null, null));
-		request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage, null, null));
+    	String postPerPage = propUtil.getProperty("frontend.news.itemsperpage");
+    	String pageNumber = request.getParameter("page");
+    	
+    	request.setAttribute("paginations", postDao.getPaginationResult(false, pageNumber, postPerPage, filterAndSort));
+		request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage, filterAndSort));
 		request.setAttribute("pageNumber", pageNumber);
 		RequestDispatcher view = request.getRequestDispatcher(TEMPLATE);
 		view.forward(request, response);

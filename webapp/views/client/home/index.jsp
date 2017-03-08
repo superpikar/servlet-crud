@@ -21,7 +21,14 @@
 			<div class="columns blog-post">
 				<div class="column is-4">
 					<a href="${pageContext.request.contextPath}/news?id=${post.id}">
+					<c:choose>
+						<c:when test="${not empty post.image}">
 						<img src="${pageContext.request.contextPath}/files/${post.image}" alt="" />
+						</c:when>
+						<c:otherwise>
+						<img src="http://placehold.it/350x230?text=no-image" alt="" />
+						</c:otherwise>
+					</c:choose>
 					</a>
 				</div>
 				<div class="column is-8">

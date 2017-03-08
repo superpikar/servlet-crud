@@ -15,22 +15,19 @@ import superpikar.servlet.admin.model.PaginationResult;
  * @author http://twitter.com/superpikar
  *
  */
-public class BaseDao {
+public class BaseDaoBackup {
 	protected Connection connection;
 	protected String tableName;
+	protected PaginationResult paginationResult;
+	protected FilterAndSort filterAndSort;
 	
-	public BaseDao(){
-	}
-	
-	protected PreparedStatement setPreparedStatementGetRows(boolean isDeleted, String pageNum, String postPerPag, FilterAndSort filterAndSort) {
-		PreparedStatement preparedStatement = null;
-		int postPerPage = Integer.parseInt(postPerPag);
-		int pageNumber = pageNum==null?1:Integer.parseInt(pageNum);
+	protected PreparedStatement setPreparedStatementGetRows(boolean isDeleted, int pageNumber, int postPerPage, String condition, String keyword, String sortColumn, String sortOrder) {
 		int offset = (pageNumber-1)*postPerPage;
-		String condition = filterAndSort.getCondition()==null? "": filterAndSort.getCondition();
-		String keyword = filterAndSort.getKeyword()==null? "": filterAndSort.getKeyword();
-		String sortColumn = filterAndSort.getSortColumn()==null? "": filterAndSort.getSortColumn();
-		String sortOrder = filterAndSort.getSortOrder()==null? "": filterAndSort.getSortOrder();
+		PreparedStatement preparedStatement = null;
+		condition = condition==null? "": condition;
+		keyword = keyword==null? "": keyword;
+		sortColumn = sortColumn==null? "": sortColumn;
+		sortOrder = sortOrder==null? "": sortOrder;
 		
 		try {
 			if(condition.equalsIgnoreCase("") && sortColumn.equalsIgnoreCase("")){
@@ -66,13 +63,12 @@ public class BaseDao {
 		return preparedStatement;
 	}
 	
-	protected PreparedStatement setPreparedStatementGetPaginations(boolean isDeleted, FilterAndSort filterAndSort) {
+	protected PreparedStatement setPreparedStatementGetPaginations(boolean isDeleted, String condition, String keyword, String sortColumn, String sortOrder) {
 		PreparedStatement preparedStatement = null;
-		
-		String condition = filterAndSort.getCondition()==null? "": filterAndSort.getCondition();
-		String keyword = filterAndSort.getKeyword()==null? "": filterAndSort.getKeyword();
-		String sortColumn = filterAndSort.getSortColumn()==null? "": filterAndSort.getSortColumn();
-		String sortOrder = filterAndSort.getSortOrder()==null? "": filterAndSort.getSortOrder();
+		condition = condition==null? "": condition;
+		keyword = keyword==null? "": keyword;
+		sortColumn = sortColumn==null? "": sortColumn;
+		sortOrder = sortOrder==null? "": sortOrder;
 		
 		try {
 			if(condition.equalsIgnoreCase("") && sortColumn.equalsIgnoreCase("")){
@@ -100,29 +96,21 @@ public class BaseDao {
 		return preparedStatement;
 	}
 	
-	public PaginationResult getPaginationResult(boolean isDeleted, String pageNum, String postPerPag, FilterAndSort filterAndSort){
-		int postPerPage = Integer.parseInt(postPerPag);
-		int pageNumber = pageNum==null?1:Integer.parseInt(pageNum);
-		
-		PaginationResult paginationResult = new PaginationResult();
-		
+	public PaginationResult getPaginationResult(boolean isDeleted, int pageNumber, int postPerPage, String condition, String keyword, String sortColumn, String sortOrder){
+		PaginationResult result = new PaginationResult();
 		try{
-			PreparedStatement preparedStatement = setPreparedStatementGetPaginations(isDeleted, filterAndSort);
+			PreparedStatement preparedStatement = setPreparedStatementGetPaginations(isDeleted, condition, keyword, sortColumn, sortOrder);
 			
 			System.out.println("pagination query " + preparedStatement.toString());
 			ResultSet rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				int total = rs.getInt("total");
 				int stepCount = total/postPerPage;
-				int prevStepCount = stepCount;
+				
 				// add 1 if number of stepCount is odd
-				if(stepCount==0){
-					stepCount = 1;
+				if(stepCount%2==0 && stepCount!=0){
+					stepCount = stepCount+1;
 				}
-				else if(total%postPerPage>0){	// if has remaining post on the last page
-					stepCount = stepCount+1;					
-				}
-				System.out.println("total:"+total+" perpage:"+postPerPage+" stepcount"+prevStepCount+" pages:"+stepCount);
 				
 				ArrayList<Integer> paginations = new ArrayList<Integer>();
 				for(int i=0; i<stepCount; i++){
@@ -132,18 +120,18 @@ public class BaseDao {
 				int firstRowNumber = ((pageNumber-1)*postPerPage) + 1;
 				int lastRowNumber = firstRowNumber-1+total;
 				
-				paginationResult.setFirstRowNumber(firstRowNumber);
-				paginationResult.setLastRowNumber(lastRowNumber);
-				paginationResult.setTotalRows(total);
-				paginationResult.setPaginations(paginations);
-				paginationResult.setPostPerPage(postPerPage);
-				paginationResult.setPageNumber(pageNumber);
+				result.setFirstRowNumber(firstRowNumber);
+				result.setLastRowNumber(lastRowNumber);
+				result.setTotalRows(total);
+				result.setPaginations(paginations);
+				result.setPostPerPage(postPerPage);
+				result.setPageNumber(pageNumber);
 			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return paginationResult;		
+		return result;		
 	}
 	
 }

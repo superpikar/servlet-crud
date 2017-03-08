@@ -44,56 +44,23 @@
 	
 	<jsp:body>
 		<h1 class="title">Post List</h1>
-		<div class="level">
-			<div class="level-left">
-				<div class="level-item">
-					<form action="${pageContext.request.contextPath}/admin/news">
-						<div class="control is-grouped">
-						    <p class="control is-expanded">
-						      	<span class="select">
-								    <select name="condition">
-								    <c:forEach items="${requestScope.searchConditions}" var="val">
-								    	<c:if test="${val.key==requestScope.condition}">
-								      	<option selected value="${val.key}">${val.value}</option>
-								    	</c:if>
-								    	<c:if test="${val.key!=requestScope.condition}">
-								      	<option value="${val.key}">${val.value}</option>
-								    	</c:if>							    	
-								    </c:forEach>
-								    </select>
-								</span>
-						    </p>
-						    <p class="control is-expanded">
-						    	<c:if test="${requestScope.keyword==null}">
-						      	<input name="keyword" class="input" type="text" placeholder="Keyword"/>
-						    	</c:if>
-						    	<c:if test="${requestScope.keyword!=null}">
-						      	<input name="keyword" class="input is-info" type="text" placeholder="Keyword" value="${requestScope.keyword}"/>
-						    	</c:if>
-						    </p>
-						    <p class="control">
-							    <button class="button is-info">Search</button>
-						  	</p>
-						</div>
-						<input type="hidden" name="action" value="${requestScope.action}"/>
-					</form>
-				</div>
-			</div>
-			<div class="level-right">
-				<div class="level-item">
-					<!-- get page context http://stackoverflow.com/questions/5850336/what-does-this-expression-language-pagecontext-request-contextpath-exactly-do -->
-		    		<a href="${pageContext.request.contextPath}/admin/news?action=add" class="button is-primary">Add News</a>
-				</div>
-			</div>
-		</div>
+		<c:import url="../shared/_search.jsp">
+	  		<c:param name="formActionTo" value="/admin/news" />
+	  		<c:param name="addRouteTo" value="/admin/news?action=add" />
+	  		<c:param name="addButtonText" value="Add News" />
+		</c:import>
+		
+		<c:import url="../shared/_sort.jsp">
+	  		<c:param name="formActionTo" value="/admin/news" />
+		</c:import>
 		
 		<table class="table">
 			<thead>
 				<tr>
-					<th>Title/Excerpt</th>
+					<th>Title</th>
 					<th></th>
 					<th>Summary</th>
-					<th>Created</th>
+					<th>Reg. Date</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
@@ -116,19 +83,18 @@
 									<img src="${pageContext.request.contextPath}/files/${post.image}" alt="" />
 								</c:when>
 								<c:otherwise>
-									<img src="http://placehold.it/64x64" alt="" />
+									<img src="http://placehold.it/64x64?text=no-image" alt="" />
 								</c:otherwise>
 							</c:choose>
 						</figure>
 					</td>
 					<td>${post.summary}</td>
 					<td>
-						${post.registerUserId}<br/>
 						${post.registerDate}
 					</td>
 					<td>
 					<c:choose>
-						<c:when test="${action == 'list' || action=='delete' }">
+						<c:when test="${requestScope.action == 'list' || requestScope.action=='delete' }">
 						<p class="control">
 						  	<a class="button" href="${pageContext.request.contextPath}/admin/news?action=edit&id=${post.id}">
 						    	<span class="icon is-small">
@@ -145,7 +111,7 @@
 						<c:when test="${requestScope.action == 'trash' || requestScope.action=='restore' }">
 						<p class="control">
 						  	<a class="button" href="#" v-on:click="confirmRestore(${post.id}, '${post.title}')">
-						    	<span class="icon is-small" alt="restore">
+						    	<span class="icon is-small">
 						      		<i class="fa fa-undo"></i>
 						    	</span>
 						  	</a>
@@ -160,9 +126,8 @@
 		</table>
 	  	
 	  	<c:import url="../shared/_pagination.jsp">
-		  <c:param name="itemsLength" value="${fn:length(requestScope.posts)}"/>
-		  <c:param name="routeTo" value="/admin/news" />
-		  <c:param name="queryString" value="${requestScope.additionalQueryString}"/>		  
+	  		<c:param name="routeTo" value="/admin/news" />
+		  	<c:param name="queryString" value="${requestScope.searchQueryString}${requestScope.sortQueryString}"/>
 		</c:import>
 	
 	</jsp:body>

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import superpikar.servlet.admin.dao.PostDao;
+import superpikar.servlet.admin.model.FilterAndSort;
 import superpikar.servlet.admin.model.Post;
 import superpikar.servlet.admin.model.User;
 import superpikar.servlet.util.ImageUtil;
@@ -31,20 +32,26 @@ public class PostController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private PostDao postDao;
 	private PropUtil propUtil;
-	private int postPerPage;
 	private final String TEMPLATE_LIST = "/views/admin/post/post-list.jsp";
 	private final String TEMPLATE_SINGLE = "/views/admin/post/post-single.jsp";
 	private HashMap<String, String> searchConditions = new HashMap<String, String>();
+	private HashMap<String, String> sortColumns = new HashMap<String, String>();
+	private FilterAndSort filterAndSort = new FilterAndSort();
 	
 	public PostController(){
 		postDao = new PostDao();
 		
 		searchConditions.put("title", "Title");
 		searchConditions.put("content", "Content");
+		sortColumns.put("title", "Title");
+		sortColumns.put("registerDate", "Reg. Date");
+		
+		filterAndSort.setSearchConditions(searchConditions);
+		filterAndSort.setSortColumns(sortColumns);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO ADD FILTER AND SORT FUNCTION
+		// TODO ADD SORT FUNCTION
 		HttpSession session = request.getSession();
 		propUtil = new PropUtil(getServletContext());
 		String action = request.getParameter("action")==null? "list": request.getParameter("action");
@@ -58,12 +65,14 @@ public class PostController extends HttpServlet {
 			template = TEMPLATE_SINGLE;
 		} 
 		else {
-			String page = request.getParameter("page");
-			postPerPage = Integer.valueOf(propUtil.getProperty("backend.news.itemsperpage"));
-			int pageNumber = page==null?1:Integer.parseInt(page);
-			String condition = request.getParameter("condition");
-			String keyword = request.getParameter("keyword");
+			String pageNumber = request.getParameter("page");
+			String postPerPage = propUtil.getProperty("backend.news.itemsperpage");
 			boolean showIsDelete = false;
+			
+			filterAndSort.setCondition(request.getParameter("condition"));
+			filterAndSort.setKeyword(request.getParameter("keyword"));
+			filterAndSort.setSortColumn(request.getParameter("sortColumn"));
+			filterAndSort.setSortOrder(request.getParameter("sortOrder"));
 			
 			if(action.equalsIgnoreCase("list")){
 				session.removeAttribute("message");	// clear session
@@ -83,16 +92,17 @@ public class PostController extends HttpServlet {
 				showIsDelete = true;
 			}
 			
-			if(condition!=null){
-				request.setAttribute("additionalQueryString", "&condition="+condition+"&keyword="+keyword);
+			if(filterAndSort.getCondition()!=null){
+				request.setAttribute("searchQueryString", "&condition="+filterAndSort.getCondition()+"&keyword="+filterAndSort.getKeyword());
 			}
 			
-			request.setAttribute("keyword", keyword);
-			request.setAttribute("condition", condition);
-			request.setAttribute("searchConditions", searchConditions);
-			request.setAttribute("pageNumber", pageNumber);
-			request.setAttribute("posts", postDao.getAllPosts(showIsDelete, pageNumber, postPerPage, condition, keyword));
-			request.setAttribute("paginations", postDao.getPaginationResult(showIsDelete, postPerPage, condition, keyword));
+			if(filterAndSort.getSortColumn()!=null){
+				request.setAttribute("sortQueryString", "&sortColumn="+filterAndSort.getSortColumn()+"&sortOrder="+filterAndSort.getSortOrder());
+			}
+			
+			request.setAttribute("filterAndSort", filterAndSort);
+			request.setAttribute("posts", postDao.getAllPosts(showIsDelete, pageNumber, postPerPage, filterAndSort));
+			request.setAttribute("paginations", postDao.getPaginationResult(showIsDelete, pageNumber, postPerPage, filterAndSort));
 			template = TEMPLATE_LIST;
 		}
 		

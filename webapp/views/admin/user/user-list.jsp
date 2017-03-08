@@ -44,48 +44,15 @@
 	
 	<jsp:body>
 		<h1 class="title">User List</h1>
-		<div class="level">
-			<div class="level-left">
-				<div class="level-item">
-					<form action="${pageContext.request.contextPath}/admin/user">
-						<div class="control is-grouped">
-						    <p class="control is-expanded">
-						      	<span class="select">
-								    <select name="condition">
-								    <c:forEach items="${requestScope.searchConditions}" var="val">
-								    	<c:if test="${val.key==requestScope.condition}">
-								      	<option selected value="${val.key}">${val.value}</option>
-								    	</c:if>
-								    	<c:if test="${val.key!=requestScope.condition}">
-								      	<option value="${val.key}">${val.value}</option>
-								    	</c:if>							    	
-								    </c:forEach>
-								    </select>
-								</span>
-						    </p>
-						    <p class="control is-expanded">
-						    	<c:if test="${requestScope.keyword==null}">
-						      	<input name="keyword" class="input" type="text" placeholder="Keyword"/>
-						    	</c:if>
-						    	<c:if test="${requestScope.keyword!=null}">
-						      	<input name="keyword" class="input is-info" type="text" placeholder="Keyword" value="${requestScope.keyword}"/>
-						    	</c:if>
-						    </p>
-						    <p class="control">
-							    <button class="button is-info">Search</button>
-						  	</p>
-						</div>
-						<input type="hidden" name="action" value="${requestScope.action}"/>
-					</form>
-				</div>
-			</div>
-			<div class="level-right">
-				<div class="level-item">
-					<!-- get page context http://stackoverflow.com/questions/5850336/what-does-this-expression-language-pagecontext-request-contextpath-exactly-do -->
-		    		<a href="${pageContext.request.contextPath}/admin/user?action=add" class="button is-primary">Add User</a>
-				</div>
-			</div>
-		</div>
+		<c:import url="../shared/_search.jsp">
+	  		<c:param name="formActionTo" value="/admin/user" />
+	  		<c:param name="addRouteTo" value="/admin/user?action=add" />
+	  		<c:param name="addButtonText" value="Add User" />
+		</c:import>
+		
+		<c:import url="../shared/_sort.jsp">
+	  		<c:param name="formActionTo" value="/admin/user" />
+		</c:import>
 		
 		<table class="table">
 			<thead>
@@ -115,7 +82,7 @@
 									<img src="${pageContext.request.contextPath}/files/${user.image}" alt="" />
 								</c:when>
 								<c:otherwise>
-									<img src="http://placehold.it/64x64" alt="" />
+									<img src="http://placehold.it/64x64?text=no-image" alt="" />
 								</c:otherwise>
 							</c:choose>
 						</figure>
