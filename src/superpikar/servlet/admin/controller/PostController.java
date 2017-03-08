@@ -51,7 +51,6 @@ public class PostController extends HttpServlet {
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO ADD SORT FUNCTION
 		HttpSession session = request.getSession();
 		propUtil = new PropUtil(getServletContext());
 		String action = request.getParameter("action")==null? "list": request.getParameter("action");

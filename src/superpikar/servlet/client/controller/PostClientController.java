@@ -38,6 +38,7 @@ public class PostClientController extends HttpServlet {
 		
     	
     	if(id!=null){
+    		// TODO add comment functionality
 			request.setAttribute("post", postDao.getPostById(Integer.valueOf(id)));			
 			template = TEMPLATE_SINGLE;
 		}
