@@ -8,9 +8,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import superpikar.servlet.admin.dao.CommentDao;
 import superpikar.servlet.admin.dao.PostDao;
+import superpikar.servlet.admin.model.Comment;
 import superpikar.servlet.admin.model.FilterAndSort;
+import superpikar.servlet.admin.model.Post;
+import superpikar.servlet.admin.model.User;
+import superpikar.servlet.util.ImageUtil;
 import superpikar.servlet.util.PropUtil;
 
 /**
@@ -21,11 +27,13 @@ public class PostClientController extends HttpServlet {
 	private final String TEMPLATE_LIST = "/views/client/post/post-list.jsp";
 	private final String TEMPLATE_SINGLE = "/views/client/post/post-single.jsp";
 	private PostDao postDao;
+	private CommentDao commentDao;
 	private PropUtil propUtil;
 	private FilterAndSort filterAndSort = new FilterAndSort();
 	
 	public PostClientController() {
 		postDao = new PostDao();
+		commentDao = new CommentDao();
 	}
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -36,10 +44,11 @@ public class PostClientController extends HttpServlet {
     	String pageNumber = request.getParameter("page");
     	String postPerPage = propUtil.getProperty("client.postperpage");
 		
-    	
     	if(id!=null){
     		// TODO add comment functionality
-			request.setAttribute("post", postDao.getPostById(Integer.valueOf(id)));			
+    		int postId = Integer.valueOf(id);
+			request.setAttribute("post", postDao.getPostById(postId));
+			request.setAttribute("comments", commentDao.getAllCommentByChannelId("post", postId, false));
 			template = TEMPLATE_SINGLE;
 		}
     	else {
@@ -51,5 +60,25 @@ public class PostClientController extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		String channel = request.getParameter("channel");
+		String channelId = request.getParameter("channelId");
+		String parentId = request.getParameter("parentId");
+		int resultId;
+		
+		if(session.getAttribute("user") == null){
+			response.sendRedirect(request.getContextPath()+"/admin/news?id="+channelId);
+		}
+		else {
+			Comment comment = new Comment();
+			User user = (User)session.getAttribute("user");
+			comment.setComment(request.getParameter("comment"));
+			comment.setChannel(request.getParameter("channel"));
+			comment.setChannelId(Integer.valueOf(request.getParameter("channelId")));
+			comment.setRegisterUserId(user.getId());
+			comment.setRegisterIp(request.getRemoteAddr());
+			resultId = commentDao.addComment(comment);
+			response.sendRedirect(request.getContextPath()+"/news?id="+channelId+"#comment-"+resultId);
+		}
 	}
 }

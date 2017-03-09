@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import superpikar.servlet.admin.model.BaseModel;
 import superpikar.servlet.admin.model.FilterAndSort;
 import superpikar.servlet.admin.model.PaginationResult;
+import superpikar.servlet.util.DbUtil;
 
 /**
  * Following this answer http://stackoverflow.com/posts/18778307/revisions
@@ -18,8 +19,10 @@ import superpikar.servlet.admin.model.PaginationResult;
 public class BaseDao {
 	protected Connection connection;
 	protected String tableName;
+	protected String tablePrefix;
 	
 	public BaseDao(){
+		tablePrefix = DbUtil.getdbPrefix();
 	}
 	
 	protected PreparedStatement setPreparedStatementGetRows(boolean isDeleted, String pageNum, String postPerPag, FilterAndSort filterAndSort) {

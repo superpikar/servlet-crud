@@ -38,6 +38,8 @@ public class LoginController extends HttpServlet {
 		}
 		else{
 			session.removeAttribute("message");
+			String fromURI = request.getParameter("from");
+			request.setAttribute("from", fromURI);
 			RequestDispatcher view = request.getRequestDispatcher(TEMPLATE_LOGIN);
 			view.forward(request, response);			
 		}
@@ -48,6 +50,7 @@ public class LoginController extends HttpServlet {
 		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		String fromURI = request.getParameter("from");		// for redirecting back to a page after login, credit http://stackoverflow.com/questions/1921230/redirect-back-to-a-page-after-a-login
 		
 		User result = userDao.getUserByUsernamePassword(username, password);
 		System.out.println(result.getUsername()+" "+result.getPassword());
@@ -55,7 +58,20 @@ public class LoginController extends HttpServlet {
 		if(!result.isEmpty()){
 			session.setAttribute("message", "Login success");
 			session.setAttribute("user", result);
-			response.sendRedirect(request.getContextPath()+"/admin");
+			
+			if(fromURI==null){
+				response.sendRedirect(request.getContextPath()+"/admin");				
+			}
+			else {
+				if(fromURI.equalsIgnoreCase("")){
+					response.sendRedirect(request.getContextPath()+"/admin");
+				}
+				else {
+					// redirect back to the referer page
+					response.sendRedirect(fromURI);					
+				}
+			}
+			
 		}
 		else {
 			System.out.println("null!");

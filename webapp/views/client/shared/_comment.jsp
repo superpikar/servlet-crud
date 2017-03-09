@@ -1,4 +1,4 @@
-<div class="blog-comment media">
+<div id="comment-${param.id}" class="blog-comment media">
   <figure class="media-left">
     <p class="image is-64x64">
       <img src="http://bulma.io/images/placeholders/128x128.png">
@@ -7,9 +7,9 @@
   <div class="media-content">
     <div class="content">
       <p>
-        <strong>John Smith</strong> <small>@johnsmith</small> <small>31m</small>
+        <strong>${param.username}</strong> <small>${param.email}</small> <small>${param.registerDate}</small>
         <br>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
+        <p>${param.comment}</p>
       </p>
     </div>
     <nav class="level">

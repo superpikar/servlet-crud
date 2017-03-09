@@ -32,7 +32,6 @@ public class HomeClientController extends HttpServlet {
     	
     	request.setAttribute("paginations", postDao.getPaginationResult(false, pageNumber, postPerPage, filterAndSort));
 		request.setAttribute("posts", postDao.getAllPosts(false, pageNumber, postPerPage, filterAndSort));
-		request.setAttribute("pageNumber", pageNumber);
 		RequestDispatcher view = request.getRequestDispatcher(TEMPLATE);
 		view.forward(request, response);
 	}

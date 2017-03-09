@@ -21,7 +21,7 @@ CREATE TABLE `pikarcms_tablename` (
   `modificationUserId` int(11) DEFAULT NULL,
   `modificationDate` datetime DEFAULT NULL,
   `deleted` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `pikarcms_tablename`
   ADD PRIMARY KEY (`id`);

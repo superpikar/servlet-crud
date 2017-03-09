@@ -24,7 +24,6 @@ public class PostDao extends BaseDao{
 		super();
 		connection = DbUtil.getConnection();
 		tableName = DbUtil.getTableName("post");
-//		System.out.print("table "+tableName);
 	}
 	
 	public int addPost(Post post){

@@ -52,6 +52,7 @@
 					                	<input class="input" type="password" name="password" placeholder="●●●●●●●">
 					              	</p>
 					              	<p class="control" style="margin-top:20px;">
+					              		<input type="hidden" name="from" value="${requestScope.from}"/>
 					                	<button class="button is-primary is-fullwidth">Login</button>
 					              	</p>
 								</form>
