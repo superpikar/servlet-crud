@@ -25,7 +25,7 @@ public class BaseDao {
 		tablePrefix = DbUtil.getdbPrefix();
 	}
 	
-	protected PreparedStatement setPreparedStatementGetRows(boolean isDeleted, String pageNum, String postPerPag, FilterAndSort filterAndSort) {
+	protected PreparedStatement setPreparedStatementGetRows(boolean isDeleted, String pageNum, String postPerPag, FilterAndSort filterAndSort, boolean includeUserData) {
 		PreparedStatement preparedStatement = null;
 		int postPerPage = Integer.parseInt(postPerPag);
 		int pageNumber = pageNum==null?1:Integer.parseInt(pageNum);
@@ -37,26 +37,46 @@ public class BaseDao {
 		
 		try {
 			if(condition.equalsIgnoreCase("") && sortColumn.equalsIgnoreCase("")){
-				preparedStatement = connection.prepareStatement("SELECT * FROM "+tableName+" WHERE deleted=? ORDER BY id DESC LIMIT ? OFFSET ?");
+				if(includeUserData){
+					preparedStatement = connection.prepareStatement("SELECT tab.*, us.username, us.email FROM "+tableName+" tab LEFT JOIN "+tablePrefix+"user us ON tab.registerUserId=us.id WHERE tab.deleted=? ORDER BY tab.id DESC LIMIT ? OFFSET ?");
+				}
+				else {
+					preparedStatement = connection.prepareStatement("SELECT * FROM "+tableName+" WHERE deleted=? ORDER BY id DESC LIMIT ? OFFSET ?");					
+				}
 				preparedStatement.setBoolean(1, isDeleted);
 				preparedStatement.setInt(2, postPerPage);
 				preparedStatement.setInt(3, offset);
 			}
 			else if(!condition.equalsIgnoreCase("") && sortColumn.equalsIgnoreCase("")){
-				preparedStatement = connection.prepareStatement("SELECT * FROM "+tableName+" WHERE deleted=? AND "+condition+" LIKE ? ORDER BY id DESC LIMIT ? OFFSET ?");
+				if(includeUserData){					
+					preparedStatement = connection.prepareStatement("SELECT tab.*, us.username, us.email FROM "+tableName+" tab LEFT JOIN "+tablePrefix+"user us ON tab.registerUserId=us.id  WHERE tab.deleted=? AND tab."+condition+" LIKE ? ORDER BY tab.id DESC LIMIT ? OFFSET ?");
+				}
+				else {
+					preparedStatement = connection.prepareStatement("SELECT * FROM "+tableName+" WHERE deleted=? AND "+condition+" LIKE ? ORDER BY id DESC LIMIT ? OFFSET ?");
+				}
 				preparedStatement.setBoolean(1, isDeleted);
 				preparedStatement.setString(2, "%"+keyword+"%");
 				preparedStatement.setInt(3, postPerPage);
 				preparedStatement.setInt(4, offset);
 			}
 			else if(condition.equalsIgnoreCase("") && !sortColumn.equalsIgnoreCase("")){
-				preparedStatement = connection.prepareStatement("SELECT * FROM "+tableName+" WHERE deleted=? ORDER BY "+sortColumn+" "+sortOrder+" LIMIT ? OFFSET ?");
+				if(includeUserData){
+					preparedStatement = connection.prepareStatement("SELECT tab.*, us.username, us.email FROM "+tableName+" tab LEFT JOIN "+tablePrefix+"user us ON tab.registerUserId=us.id WHERE tab.deleted=? ORDER BY tab."+sortColumn+" "+sortOrder+" LIMIT ? OFFSET ?");
+				}
+				else {
+					preparedStatement = connection.prepareStatement("SELECT * FROM "+tableName+" WHERE deleted=? ORDER BY "+sortColumn+" "+sortOrder+" LIMIT ? OFFSET ?");					
+				}
 				preparedStatement.setBoolean(1, isDeleted);
 				preparedStatement.setInt(2, postPerPage);
 				preparedStatement.setInt(3, offset);
 			}
 			else {
-				preparedStatement = connection.prepareStatement("SELECT * FROM "+tableName+" WHERE deleted=? AND "+condition+" LIKE ? ORDER BY "+sortColumn+" "+sortOrder+" LIMIT ? OFFSET ?");
+				if(includeUserData){
+					preparedStatement = connection.prepareStatement("SELECT tab.*, us.username, us.email FROM "+tableName+" tab LEFT JOIN "+tablePrefix+"user us ON tab.registerUserId=us.id WHERE tab.deleted=? AND tab."+condition+" LIKE ? ORDER BY "+sortColumn+" "+sortOrder+" LIMIT ? OFFSET ?");
+				}
+				else {
+					preparedStatement = connection.prepareStatement("SELECT * FROM "+tableName+" WHERE deleted=? AND "+condition+" LIKE ? ORDER BY "+sortColumn+" "+sortOrder+" LIMIT ? OFFSET ?");					
+				}
 				preparedStatement.setBoolean(1, isDeleted);
 				preparedStatement.setString(2, "%"+keyword+"%");
 				preparedStatement.setInt(3, postPerPage);

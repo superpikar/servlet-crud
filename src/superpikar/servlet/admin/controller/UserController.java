@@ -101,7 +101,7 @@ public class UserController extends HttpServlet {
 			}
 			
 			request.setAttribute("filterAndSort", filterAndSort);
-			request.setAttribute("users", userDao.getAllUsers(showIsDelete, pageNumber, postPerPage, filterAndSort));	
+			request.setAttribute("users", userDao.getAllUsers(showIsDelete, pageNumber, postPerPage, filterAndSort, false));	
 			request.setAttribute("paginations", userDao.getPaginationResult(showIsDelete, pageNumber, postPerPage, filterAndSort));
 			template = TEMPLATE_LIST;
 		}

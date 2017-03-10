@@ -13,6 +13,7 @@ import superpikar.servlet.admin.model.BaseModel;
 import superpikar.servlet.admin.model.FilterAndSort;
 import superpikar.servlet.admin.model.PaginationResult;
 import superpikar.servlet.admin.model.Post;
+import superpikar.servlet.admin.model.User;
 import superpikar.servlet.util.DbUtil;
 
 /*
@@ -101,7 +102,7 @@ public class PostDao extends BaseDao{
 		List<Post> posts = new ArrayList<Post>();
 		try {
 			// query sample : SELECT * FROM pikarcms_post ORDER BY id LIMIT 2 OFFSET 0
-			PreparedStatement preparedStatement = setPreparedStatementGetRows(isDeleted, pageNumber, postPerPage, filterAndSort);
+			PreparedStatement preparedStatement = setPreparedStatementGetRows(isDeleted, pageNumber, postPerPage, filterAndSort, true);
 			
 			System.out.println("list query " + preparedStatement.toString());
 			ResultSet rs = preparedStatement.executeQuery();
@@ -109,6 +110,12 @@ public class PostDao extends BaseDao{
 				Post post = new Post(rs.getInt("id"), rs.getString("title"), rs.getString("slug"), rs.getString("content"), rs.getString("summary"), rs.getString("image"));
 				post.setRegisterProperties(rs.getString("registerIp"), rs.getInt("registerUserId"), rs.getDate("registerDate"));
 				post.setModificationProperties(rs.getString("modificationIp"), rs.getInt("modificationUserId"), rs.getDate("modificationDate"));
+				
+				User user = new User();
+				user.setUsername(rs.getString("username"));
+				user.setEmail(rs.getString("email"));
+				post.setUser(user);
+				
 				posts.add(post);
 			}
 		} catch (SQLException e) {
@@ -125,7 +132,7 @@ public class PostDao extends BaseDao{
 	public Post getPostById(int ID){
 		Post post = new Post();
 		try {
-			PreparedStatement preparedStatement = connection.prepareStatement("select * from "+tableName+" where id=?");
+			PreparedStatement preparedStatement = connection.prepareStatement("select tab.*, us.username, us.email from "+tableName+" tab LEFT JOIN "+tablePrefix+"user us ON tab.registerUserId=us.id WHERE tab.id=?");
 			preparedStatement.setInt(1, ID);
 			ResultSet rs = preparedStatement.executeQuery();
 			if(rs.next()){

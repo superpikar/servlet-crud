@@ -89,10 +89,10 @@ public class UserDao extends BaseDao{
 		}
 	}
 	
-	public List<User> getAllUsers(boolean isDeleted, String pageNumber, String postPerPage, FilterAndSort filterAndSort){
+	public List<User> getAllUsers(boolean isDeleted, String pageNumber, String postPerPage, FilterAndSort filterAndSort, boolean includeUserData){
 		List<User> users = new ArrayList<User>();		
 		try {
-			PreparedStatement preparedStatement = setPreparedStatementGetRows(isDeleted, pageNumber, postPerPage, filterAndSort);
+			PreparedStatement preparedStatement = setPreparedStatementGetRows(isDeleted, pageNumber, postPerPage, filterAndSort, includeUserData);
 			System.out.println("list query " + preparedStatement.toString());
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {

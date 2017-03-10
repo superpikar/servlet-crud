@@ -9,6 +9,7 @@ public class Post extends BaseModel{
 	private String content;
 	private String summary;
 	private String image;
+	private User user;
 	
 	public Post(){
 		
@@ -58,5 +59,13 @@ public class Post extends BaseModel{
 	}
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

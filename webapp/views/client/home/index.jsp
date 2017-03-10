@@ -33,6 +33,9 @@
 				</div>
 				<div class="column is-8">
 					<p class="blog-timestamp">
+					<span><i class="fa fa-user"></i> ${post.user.username}</span> 
+					
+					<i class="fa fa-calendar"></i> 
 					<c:choose>
 						<c:when test="${not empty post.modificationDate}">${post.modificationDate}</c:when>
 						<c:otherwise>${post.registerDate}</c:otherwise>
