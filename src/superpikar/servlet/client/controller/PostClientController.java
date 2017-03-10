@@ -61,9 +61,8 @@ public class PostClientController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		String channel = request.getParameter("channel");
 		String channelId = request.getParameter("channelId");
-		String parentId = request.getParameter("parentId");
+		int parentId = request.getParameter("parentId")==null||request.getParameter("parentId").equalsIgnoreCase("")? 0: Integer.valueOf(request.getParameter("parentId"));
 		int resultId;
 		
 		if(session.getAttribute("user") == null){
@@ -73,11 +72,16 @@ public class PostClientController extends HttpServlet {
 			Comment comment = new Comment();
 			User user = (User)session.getAttribute("user");
 			comment.setComment(request.getParameter("comment"));
+			comment.setParentId(parentId);
 			comment.setChannel(request.getParameter("channel"));
-			comment.setChannelId(Integer.valueOf(request.getParameter("channelId")));
+			comment.setChannelId(Integer.valueOf(channelId));
 			comment.setRegisterUserId(user.getId());
 			comment.setRegisterIp(request.getRemoteAddr());
 			resultId = commentDao.addComment(comment);
+			
+			comment.setId(resultId);
+			comment.setLineage(request.getParameter("lineage")+Integer.toString(resultId)+"/");
+			commentDao.updateComment(comment);
 			response.sendRedirect(request.getContextPath()+"/news?id="+channelId+"#comment-"+resultId);
 		}
 	}

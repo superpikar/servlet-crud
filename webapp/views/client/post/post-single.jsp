@@ -8,6 +8,36 @@
 		${requestScope.post.title }
 	</jsp:attribute>
 	
+	<jsp:attribute name="footer">
+	<script type="text/javascript">
+		var buttonCancelEl = $('#reply .button-cancel');
+		
+		function replyComment(commentId){
+			var commentEl = $('#comment-'+commentId);
+			
+			buttonCancelEl.removeClass('is-hidden');
+			buttonCancelEl.attr('onclick', 'cancelComment("'+commentId+'")');
+			
+			var replyEl = $('#reply').detach();
+			replyEl.appendTo('#comment-'+commentId+' .media-content');
+			
+			$('#reply [name=parentId]').attr('value', commentEl.data('id'));
+			$('#reply [name=lineage]').attr('value', commentEl.data('lineage'));
+		}
+		
+		function cancelComment(commentId){
+			buttonCancelEl.addClass('is-hidden');
+			buttonCancelEl.removeAttr('onclick');
+			
+			var replyEl = $('#reply').detach();
+			replyEl.appendTo('#reply-wrapper');
+			
+			$('#reply [name=parentId]').removeAttr('value');
+			$('#reply [name=lineage]').removeAttr('value');
+		}
+	</script>
+	</jsp:attribute>
+	
 	<jsp:body>
 		<div class="blog-posts">
 			<div class="blog-post">
@@ -36,27 +66,42 @@
 					</div>
 					</c:if>
 					<c:if test="${sessionScope.user!=null}">
-					<form class="blog-comment media" method="post" action="${pageContext.request.contextPath}/news">
-						<figure class="media-left">
-						  <p class="image is-64x64">
-						    <img src="http://bulma.io/images/placeholders/128x128.png">
-						  </p>
-						</figure>
-						<div class="media-content">
-							<p>
-								<strong>${sessionScope.user.username}</strong> <small>${sessionScope.user.email}</small> 
-							</p>
-						  <p class="control">
-						    <textarea class="textarea" name="comment" placeholder="Add a comment..."></textarea>
-						    </p>
-						    <p class="control">
-						    	<input type="hidden" name="channel" value="post"/>
-						    	<input type="hidden" name="channelId" value="${requestScope.post.id}"/>
-						    	<input type="hidden" name="parentId"/>
-						      <button class="button">Post comment</button>
-						    </p>
-						  </div>
-					</form>
+					<div id="reply-wrapper">
+						<div id="reply">
+							<div class="level">
+								<div class="level-left">
+									<div class="level-item">
+										<h4 class="title is-4">Leave a reply</h4>
+									</div>
+								</div>
+								<div class="level-right">
+									<div class="level-item">
+										<a href="#" class="button is-small is-hidden button-cancel">cancel reply</a>
+									</div>
+								</div>
+							</div>					
+							<form class="blog-comment media" method="post" action="${pageContext.request.contextPath}/news">
+								<figure class="media-left">
+								  <p class="image is-64x64">
+								    <img src="http://bulma.io/images/placeholders/128x128.png">
+								  </p>
+								</figure>
+								<div class="media-content">
+								  <p class="control">
+								    <textarea class="textarea" name="comment" placeholder="Add a comment..."></textarea>
+								    </p>
+								    <p class="control">
+								    	<input type="hidden" name="channel" value="post"/>
+								    	<input type="hidden" name="channelId" value="${requestScope.post.id}"/>
+								    	<input type="hidden" name="parentId"/>
+								    	<input type="hidden" name="lineage"/>
+								      	<button class="button">Post comment</button>
+								      	as <strong>${sessionScope.user.username}</strong> <small>${sessionScope.user.email}</small> 
+								    </p>
+								  </div>
+							</form>
+						</div>
+					</div>
 					</c:if>
 					
 					<hr />
@@ -67,17 +112,7 @@
 					</p>
 					</c:if>
 					<c:if test="${commentsCount > 0 }">
-						<c:forEach items="${requestScope.comments}" var="comment">
-						
-						<c:import url="../shared/_comment.jsp">
-							<c:param name="id" value="${comment.id}"></c:param>
-							<c:param name="username" value="${comment.user.username}"></c:param>
-							<c:param name="email" value="${comment.user.email}"></c:param>
-							<c:param name="comment" value="${comment.comment}"></c:param>
-							<c:param name="registerDate" value="${comment.registerDate}"></c:param>
-						</c:import>
-					
-						</c:forEach>
+						<c:import url="../shared/_comments.jsp"></c:import>
 					</c:if>
 				</div>
 			</div>

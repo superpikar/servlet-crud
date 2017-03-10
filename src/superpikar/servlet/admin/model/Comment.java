@@ -27,6 +27,10 @@ public class Comment extends BaseModel{
 		this.setChannelId(channelId);
 	}
 	
+	public int getLevel(){
+		return this.lineage.split("/").length - 1;
+	}
+	
 	public String getComment() {
 		return comment;
 	}	
