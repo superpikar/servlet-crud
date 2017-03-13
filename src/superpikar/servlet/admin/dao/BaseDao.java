@@ -169,4 +169,28 @@ public class BaseDao {
 		return paginationResult;		
 	}
 	
+	public int delete(int id, boolean isDeleted){
+		try{
+			PreparedStatement preparedStatement = connection.prepareStatement("update "+tableName+" set deleted=? where id=?");
+			preparedStatement.setBoolean(1, isDeleted);
+			preparedStatement.setInt(2, id);
+			System.out.println(preparedStatement.toString());
+			preparedStatement.executeUpdate();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
+	
+	public int forceDelete(int id){
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement("delete from "+tableName+" where id=?");
+			preparedStatement.setInt(1, id);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return id;
+	}
+	
 }

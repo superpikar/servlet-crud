@@ -76,26 +76,11 @@ public class CommentDao extends BaseDao{
 	}
 	
 	public int deleteComment(int id, boolean isDeleted){
-		try{
-			PreparedStatement preparedStatement = connection.prepareStatement("update "+tableName+" set deleted=? where id=?");
-			preparedStatement.setBoolean(1, isDeleted);
-			preparedStatement.setInt(2, id);
-			System.out.println(preparedStatement.toString());
-			preparedStatement.executeUpdate();
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return id;
+		return delete(id, isDeleted);
 	}
 	
-	public void forceDeleteComment(int id){
-		try {
-			PreparedStatement preparedStatement = connection.prepareStatement("delete from "+tableName+" where id=?");
-			preparedStatement.setInt(1, id);
-			preparedStatement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public int forceDeleteComment(int id){
+		return forceDelete(id);
 	}
 	
 	public List<Comment> getAllCommentByChannelId(String channel, int channelId, boolean isDeleted){

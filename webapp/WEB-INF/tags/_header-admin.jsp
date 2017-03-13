@@ -3,4 +3,5 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
 <link rel="stylesheet" href="<%=request.getContextPath()%>/libs/bulma-enhancement/css/bulma-breadcrumb.css"></link>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/modules/admin/style-admin.css"></link>
+<link rel="stylesheet" href="<%=request.getContextPath()%>/modules/shared/style-shared.css"></link>
 	

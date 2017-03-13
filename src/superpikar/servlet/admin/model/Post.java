@@ -1,5 +1,7 @@
 package superpikar.servlet.admin.model;
 
+import java.util.ArrayList;
+
 /*
  * class of Post, the attributes/fields inspired by https://docs.bolt.cm/3.3/contenttypes/intro#an-example-news-items
  * */
@@ -10,9 +12,10 @@ public class Post extends BaseModel{
 	private String summary;
 	private String image;
 	private User user;
+	private ArrayList<Term> terms;
 	
 	public Post(){
-		
+		this.setTerm(new ArrayList<Term>());
 	}
 	
 	public Post(int id, String title, String slug, String content, String summary, String image){
@@ -24,7 +27,7 @@ public class Post extends BaseModel{
 		this.title = title;
 		this.slug = slug;
 		this.content = content;
-		this.setSummary(summary);
+		this.summary = summary;
 		this.image = image;
 	}
 	
@@ -67,5 +70,13 @@ public class Post extends BaseModel{
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public ArrayList<Term> getTerms() {
+		return terms;
+	}
+
+	public void setTerm(ArrayList<Term> terms) {
+		this.terms = terms;
 	}
 }

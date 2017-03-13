@@ -1,0 +1,23 @@
+/* ACCORDION */ 
+[data-accordion] {
+	position: relative;
+	cursor: pointer;
+	padding-bottom: 10px;
+}
+[data-accordion].open > [data-control]:after {
+    -webkit-transform: rotate(-180deg);
+    -ms-transform: rotate(-180deg);
+    transform: rotate(-180deg);
+}
+[data-accordion] > [data-control]:after {
+    content: "";
+    position: absolute;
+    right: 10px;
+    font-size: 25px;
+    font-weight: 200;
+    color: #444;
+    height: 15px;
+    width: 24px;
+    background: url(../shared/images/down.png) center center no-repeat;
+    background-size: 50%;
+}
