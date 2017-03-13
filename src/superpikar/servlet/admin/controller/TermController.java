@@ -16,8 +16,8 @@ import superpikar.servlet.admin.dao.TermDao;
 import superpikar.servlet.admin.model.FilterAndSort;
 import superpikar.servlet.admin.model.Term;
 import superpikar.servlet.admin.model.User;
-import superpikar.servlet.util.ImageUtil;
 import superpikar.servlet.util.PropUtil;
+import superpikar.servlet.util.TextUtil;
 
 /**
  * Servlet implementation class PostController
@@ -50,7 +50,6 @@ public class TermController extends HttpServlet {
 		HttpSession session = request.getSession();
 		propUtil = new PropUtil(getServletContext());
 		String action = request.getParameter("action")==null? "list" : request.getParameter("action");
-		String taxonomy = request.getParameter("taxonomy");
 		String template = "";		
 		
 		if(action.equalsIgnoreCase("add")||action.equalsIgnoreCase("edit")) {
@@ -62,10 +61,13 @@ public class TermController extends HttpServlet {
 			request.setAttribute("taxonomies", propUtil.getPropertyAsArray("backend.taxonomies"));
 		}
 		else {
-			String postPerPage = propUtil.getProperty("backend.user.itemsperpage");
+			String taxonomy = request.getParameter("taxonomy")==null? "tag": request.getParameter("taxonomy");
+			String postPerPage = propUtil.getProperty("backend.term.itemsperpage");
 			String pageNumber = request.getParameter("page");
 			boolean showIsDelete = false;
 			
+			filterAndSort.setConditionDefault("taxonomy");	// SET DEFAULT SEARCH FOR TAXONOMY
+			filterAndSort.setKeywordDefault(taxonomy);
 			filterAndSort.setCondition(request.getParameter("condition"));
 			filterAndSort.setKeyword(request.getParameter("keyword"));
 			filterAndSort.setSortColumn(request.getParameter("sortColumn"));
@@ -99,7 +101,8 @@ public class TermController extends HttpServlet {
 			
 			request.setAttribute("filterAndSort", filterAndSort);
 			request.setAttribute("taxonomy", taxonomy);
-			request.setAttribute("users", termDao.getAllTerms(showIsDelete, pageNumber, postPerPage, filterAndSort));	
+			request.setAttribute("title", TextUtil.capitalize(taxonomy));
+			request.setAttribute("terms", termDao.getAllTerms(showIsDelete, pageNumber, postPerPage, filterAndSort));	
 			request.setAttribute("paginations", termDao.getPaginationResult(showIsDelete, pageNumber, postPerPage, filterAndSort));
 			template = TEMPLATE_LIST;
 		}

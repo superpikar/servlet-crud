@@ -71,6 +71,10 @@
     <servlet-class>superpikar.servlet.admin.controller.PostController</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>TermController</servlet-name>
+    <servlet-class>superpikar.servlet.admin.controller.TermController</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>UserController</servlet-name>
     <servlet-class>superpikar.servlet.admin.controller.UserController</servlet-class>
   </servlet>
@@ -137,6 +141,10 @@
   <servlet-mapping>
     <servlet-name>PostController</servlet-name>
     <url-pattern>/admin/news</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>TermController</servlet-name>
+    <url-pattern>/admin/term</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>UserController</servlet-name>

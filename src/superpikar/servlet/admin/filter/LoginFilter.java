@@ -55,9 +55,11 @@ public class LoginFilter implements Filter {
 				// SET cleanURI session attribute for active class in the sidebar menu of template
 				if(req.getQueryString()==null){
 					session.setAttribute("cleanURI", cleanURI);
+					session.setAttribute("cleanPath", cleanURI);
 				}
 				else {
 					session.setAttribute("cleanURI", cleanURIandParam);
+					session.setAttribute("cleanPath", cleanURI);
 				}
 				
 				if(isUserAllowed(user, propUtil, cleanURI)){

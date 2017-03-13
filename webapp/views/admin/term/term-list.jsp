@@ -75,7 +75,7 @@
 			<c:if test="${requestScope.paginations.totalRows > 0}">
 			<c:forEach items="${requestScope.terms}" var="term">
 				<tr>
-					<td><a href="${pageContext.request.contextPath}/admin/term?action=edit&id=${term.id}">$term.name}</a></td>
+					<td><a href="${pageContext.request.contextPath}/admin/term?action=edit&id=${term.id}">${term.name}</a></td>
 					<td>
 						${term.lineage}
 					</td>

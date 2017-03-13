@@ -44,68 +44,96 @@
   		</div>
 		</div>
 	</nav>
+	
+	<c:set var="scURI" value="${sessionScope.cleanURI}"></c:set>
+	
 	<div id="app" class="container">
 		<div class="columns">
 			<div class="column is-2 is-fullheight">	
 				<aside data-accordion-group class="menu">
-					<c:if test="${sessionScope.cleanURI=='admin'}">
+					<c:if test="${sessionScope.cleanPath=='admin'}">
 					<c:set var="isOpenClass" value="open"></c:set>
 					</c:if>
 					<div data-accordion class="${isOpenClass}">
 						<p data-control class="menu-label">General</p>
 						<ul data-content class="menu-list">
 							<li>
-								<a class="${sessionScope.cleanURI=='admin'?'is-active':''}" href="<%=request.getContextPath()%>/admin"><i class="fa fa-dashboard"></i> Dashboard</a>
+								<a class="${scURI=='admin'?'is-active':''}" href="<%=request.getContextPath()%>/admin"><i class="fa fa-dashboard"></i> Dashboard</a>
 							</li>
 						</ul>					
 					</div>
 				<c:if test="${sessionScope.user.role=='admin' || sessionScope.user.role=='editor'}">
-					<c:if test="${sessionScope.cleanURI=='admin/news'||sessionScope.cleanURI=='admin/news?action=add'||sessionScope.cleanURI=='admin/news?action=trash'}">
-					<c:set var="isOpenClass2" value="open"></c:set>
+					<c:if test="${sessionScope.cleanPath=='admin/news'}">
+					<c:set var="isOpenClassPost" value="open"></c:set>
 					</c:if>
-					<div data-accordion class="${isOpenClass2}">
+					<div data-accordion class="${isOpenClassPost}">
 						<p data-control class="menu-label">News</p>
 						<ul data-content class="menu-list">
 							<li>
-								<a class="${sessionScope.cleanURI=='admin/news'?'is-active':''}" href="<%=request.getContextPath()%>/admin/news"><i class="fa fa-file"></i> View News</a>
+								<a class="${scURI=='admin/news'?'is-active':''}" href="<%=request.getContextPath()%>/admin/news"><i class="fa fa-file"></i> View News</a>
 							</li>
 							<li>
-								<a class="${sessionScope.cleanURI=='admin/news?action=add'?'is-active':''}" href="<%=request.getContextPath()%>/admin/news?action=add"><i class="fa fa-pencil-square-o"></i> Add News</a>
+								<a class="${scURI=='admin/news?action=add'?'is-active':''}" href="<%=request.getContextPath()%>/admin/news?action=add"><i class="fa fa-pencil-square-o"></i> Add News</a>
 							</li>
 							<li>
-								<a class="${sessionScope.cleanURI=='admin/news?action=trash'?'is-active':''}" href="<%=request.getContextPath()%>/admin/news?action=trash"><i class="fa fa-trash"></i> Deleted News</a>
+								<a class="${scURI=='admin/news?action=trash'?'is-active':''}" href="<%=request.getContextPath()%>/admin/news?action=trash"><i class="fa fa-trash"></i> Deleted News</a>
 							</li>
 						</ul>
 					</div>
 				</c:if>
-				<c:if test="${sessionScope.user.role=='admin'}">
-					<c:if test="${sessionScope.cleanURI=='admin/user'||sessionScope.cleanURI=='admin/user?action=add'||sessionScope.cleanURI=='admin/user?action=trash'}">
-					<c:set var="isOpenClass3" value="open"></c:set>
+				
+				<c:if test="${sessionScope.user.role=='admin' || sessionScope.user.role=='editor'}">
+					<c:if test="${sessionScope.cleanPath=='admin/term'}">
+					<c:set var="isOpenClassTerm" value="open"></c:set>
 					</c:if>
-					<div data-accordion class="${isOpenClass3}">
+					<div data-accordion class="${isOpenClassTerm}">
+						<p data-control class="menu-label">Tag / Category</p>
+						<ul data-content class="menu-list">
+							<li>
+								<a class="${scURI=='admin/term'?'is-active':''}" href="<%=request.getContextPath()%>/admin/term"><i class="fa fa-file"></i> View Tag</a>
+							</li>
+							<li>
+								<a class="${scURI=='admin/term?action=trash'?'is-active':''}" href="<%=request.getContextPath()%>/admin/term?action=trash"><i class="fa fa-trash"></i> Deleted Tag</a>
+							</li>
+							<hr />
+							<li>
+								<a class="${scURI=='admin/term?taxonomy=category'?'is-active':''}" href="<%=request.getContextPath()%>/admin/term?taxonomy=category"><i class="fa fa-file"></i> View Category</a>
+							</li>
+							<li>
+								<a class="${scURI=='admin/term?action=trash&taxonomy=category'?'is-active':''}" href="<%=request.getContextPath()%>/admin/term?action=trash&taxonomy=category"><i class="fa fa-trash"></i> Deleted Category</a>
+							</li>
+						</ul>
+					</div>
+				</c:if>
+				
+				<c:if test="${sessionScope.user.role=='admin'}">
+					<c:if test="${sessionScope.cleanPath=='admin/user'}">
+					<c:set var="isOpenClassUser" value="open"></c:set>
+					</c:if>
+					<div data-accordion class="${isOpenClassUser}">
 						<p data-control class="menu-label">User</p>
 						<ul data-content class="menu-list">
 							<li>
-								<a class="${sessionScope.cleanURI=='admin/user'?'is-active':''}" href="<%=request.getContextPath()%>/admin/user"><i class="fa fa-users"></i> View Users</a>
+								<a class="${scURI=='admin/user'?'is-active':''}" href="<%=request.getContextPath()%>/admin/user"><i class="fa fa-users"></i> View Users</a>
 							</li>
 							<li>
-								<a class="${sessionScope.cleanURI=='admin/user?action=add'?'is-active':''}" href="<%=request.getContextPath()%>/admin/user?action=add"><i class="fa fa-pencil-square-o"></i> Add User</a>
+								<a class="${scURI=='admin/user?action=add'?'is-active':''}" href="<%=request.getContextPath()%>/admin/user?action=add"><i class="fa fa-pencil-square-o"></i> Add User</a>
 							</li>
 							<li>
-								<a class="${sessionScope.cleanURI=='admin/user?action=trash'?'is-active':''}" href="<%=request.getContextPath()%>/admin/user?action=trash"><i class="fa fa-trash"></i> Deleted User</a>
+								<a class="${scURI=='admin/user?action=trash'?'is-active':''}" href="<%=request.getContextPath()%>/admin/user?action=trash"><i class="fa fa-trash"></i> Deleted User</a>
 							</li>
 						</ul>
 					</div>
 				</c:if>
 				<c:if test="${sessionScope.user.role=='admin' || sessionScope.user.role=='editor'}">
-					<c:if test="${sessionScope.cleanURI=='admin/files'}">
-					<c:set var="isOpenClass4" value="open"></c:set>
+					<c:if test="${sessionScope.cleanPath=='admin/files'}">
+					<c:set var="isOpenClassFile" value="open"></c:set>
 					</c:if>
-					<div data-accordion class="${isOpenClass4}">
+					<div data-accordion class="${isOpenClassFile}">
 						<p data-control class="menu-label">Files</p>
 						<ul data-content class="menu-list">
 							<li>
-								<a class="${sessionScope.cleanURI=='admin/files'?'is-active':''}" href="<%=request.getContextPath()%>/admin/files"><i class="fa fa-folder"></i> View Files</a>
+								<a class="${scURI=='admin/files'?'is-active':''}" href="<%=request.getContextPath()%>/admin/files"><i class="fa fa-folder"></i> View Files</a>
 							</li>
 						</ul>
 					</div>

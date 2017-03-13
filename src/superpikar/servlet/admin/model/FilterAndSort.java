@@ -3,6 +3,8 @@ package superpikar.servlet.admin.model;
 import java.util.HashMap;
 
 public class FilterAndSort {
+	private String keywordDefault;
+	private String conditionDefault;
 	private String keyword;
 	private String condition;
 	private HashMap<String, String> searchConditions;
@@ -61,5 +63,21 @@ public class FilterAndSort {
 
 	public void setSortColumns(HashMap<String, String> sortColumns) {
 		this.sortColumns = sortColumns;
+	}
+
+	public String getKeywordDefault() {
+		return keywordDefault;
+	}
+
+	public void setKeywordDefault(String keywordDefault) {
+		this.keywordDefault = keywordDefault;
+	}
+
+	public String getConditionDefault() {
+		return conditionDefault;
+	}
+
+	public void setConditionDefault(String conditionDefault) {
+		this.conditionDefault = conditionDefault;
 	}
 }
